@@ -1,42 +1,36 @@
 package com.schoolchat.schoolchat;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
+
+/**
+ * Created by Gabri on 20/04/2016.
+ */
 
 
-public class MainActivity extends AppCompatActivity {
+    /*  Actividad nueva para la interfaz de los datos que se pediran al registrarse.  */
 
-    /* Declaracion del boton REGISTRAR */
-
-    Button botonRegsitrar;
-
-
-
+public class AltaUsuario extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        /*  Referenciando el boton  */
-        botonRegsitrar = (Button) findViewById(R.id.bt_Registrar);
-
+        setContentView(R.layout.activity_altausuario);
 
     }
 
-    /*  Inflacion del menu  */
+
+
+     /*  Inflacion del menu  */
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_altausuario, menu);
         return true;
-        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -53,17 +47,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    /*  Accion a realizar al pulsar en REGISTRAR: Ir a la actividad AltaUsuario  */
-
-    public void onRegistrar(View v){
-        Intent i = new Intent(this,AltaUsuario.class);
-        startActivity(i);
-
-
-    }
-
-
-
-    }
-
+}
