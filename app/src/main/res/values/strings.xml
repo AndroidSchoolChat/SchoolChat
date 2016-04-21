@@ -5,4 +5,13 @@
 
 
 
+    <!-- Textos por defecto en los EditText -->
+
+    <string name="textDefCorreo">Correo electronico</string>
+    <string name="textDefNomUsu">Nombre de Usuario</string>
+    <string name="textDefContr">Contraseña</string>
+
+
+    <string name="botonRegistrarse">Registrarse</string>
+    <string name="botonCancelar">Cancelar</string>
 </resources>

@@ -11,13 +11,58 @@
     android:clickable="true">
 
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Correo:"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="29dp" />
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/ed_Email"
+        android:layout_centerHorizontal="true"
+        android:hint="@string/textDefCorreo"
+        android:layout_marginTop="50dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ed_NombreUsuario"
+        android:hint="@string/textDefNomUsu"
+        android:layout_below="@+id/ed_Email"
+        android:layout_alignLeft="@+id/ed_Email"
+        android:layout_alignStart="@+id/ed_Email"
+        android:layout_marginTop="30dp"
+        android:layout_alignRight="@+id/ed_Email"
+        android:layout_alignEnd="@+id/ed_Email" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/ed_Contraseña"
+        android:hint="@string/textDefContr"
+        android:layout_below="@+id/ed_NombreUsuario"
+        android:layout_alignLeft="@+id/ed_NombreUsuario"
+        android:layout_alignStart="@+id/ed_NombreUsuario"
+        android:layout_marginTop="30dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_Registrarse"
+        android:text="@string/botonRegistrarse"
+        android:layout_below="@+id/ed_Contraseña"
+        android:layout_toLeftOf="@+id/bt_Cancelar"
+        android:layout_toStartOf="@+id/bt_Cancelar"
+        android:layout_marginTop="38dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/botonCancelar"
+        android:id="@+id/bt_Cancelar"
+        android:onClick="onCancelar"
+        android:layout_alignTop="@+id/bt_Registrarse"
+        android:layout_alignRight="@+id/ed_Contraseña"
+        android:layout_alignEnd="@+id/ed_Contraseña"
+        android:layout_marginLeft="10dp" />
 </RelativeLayout>
