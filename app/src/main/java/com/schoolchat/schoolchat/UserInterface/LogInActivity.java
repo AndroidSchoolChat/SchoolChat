@@ -48,7 +48,8 @@ public class LogInActivity extends Activity {
         }
     }
     public void onRegistrar(View v){
-
+        Intent i=new Intent(this,Altausuario.class);
+        startActivity(i);
     }
     //crea un handler para manejar el resultado de la autentificacion
     //esto se guardara 24 horas o el tiempo establecido en firebase->Login and Auth
