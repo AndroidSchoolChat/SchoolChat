@@ -1,3 +1,5 @@
+package com.schoolchat.schoolchat;
+
 import android.app.Application;
 
 import com.firebase.client.Firebase;

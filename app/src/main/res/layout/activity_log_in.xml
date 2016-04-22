@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--contenedor para los elemntos del login que se fija en vertical-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.schoolchat.schoolchat.UserInterface.LogInActivity">
+    <!--edittext para el email-->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/userEmail"
+        android:inputType="textEmailAddress"
+        android:hint="@string/email" />
+    <!--edittext para la contraseña-->
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/password"
+        android:inputType="textPassword"
+        android:hint="@string/password" />
+    <!--boton para entrar en la aplicacion-->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:id="@+id/login"
+        android:onClick="onLogin" />
+    <!--boton para el registro de un nuevo usuario-->
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/registro"
+        android:id="@+id/registrar"
+        android:onClick="onRegistrar" />
+</LinearLayout>

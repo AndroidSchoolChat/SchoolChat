@@ -1,4 +1,4 @@
-package Firebase;
+package com.schoolchat.schoolchat.Firebase;
 
 public class conexion {
     //Pasamos la url de nuestra aplicacion en firebase
@@ -7,4 +7,9 @@ public class conexion {
     public static final String CHILD_GROUPS="grupos";
     public static final String CHILD_CHAT="chat";
     public static final String CHILD_CONNECT="conexion";
+    public static final String KEY_EMAIL="email";
+    public static final String KEY_NAME="nombre";
+    public static final String KEY_USER_EMAIL="userEmail";
+    public static final String KEY_ONLINE="online";
+    public static final String KEY_OFFLINE="offline";
 }

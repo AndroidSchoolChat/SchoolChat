@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">SchoolChat</string>
+    <!--textos para loginactivity-->
+    <string name="title_LogIn">LogIn</string>
+    <string name="login">Entrar</string>
+    <string name="registro">Registrar</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <!--textos para la actividad alatausuario-->
+    <string name="title_Altausuario">Nuevo Usuario</string>
+    <string name="textDefCorreo">Correo electronico</string>
+    <string name="textDefNomUsu">Nombre de Usuario</string>
+    <string name="textDefContr">Contraseña</string>
+    <string name="botonCancelar">Cancelar</string>
 </resources>
