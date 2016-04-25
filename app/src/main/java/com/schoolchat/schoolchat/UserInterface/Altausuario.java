@@ -17,6 +17,7 @@ import com.firebase.client.FirebaseError;
 import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.Firebase.conexion;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,6 +72,8 @@ public class Altausuario extends Activity {
                             map.put(conexion.KEY_NAME,finalUserName);
                             map.put(conexion.KEY_USER_EMAIL,finalUserEmail);
                             map.put(conexion.CHILD_CONNECT,conexion.KEY_ONLINE);
+                            Date fecha=new Date();
+                            map.put(conexion.KEY_FECHA,fecha);
                         }
 
                         @Override
