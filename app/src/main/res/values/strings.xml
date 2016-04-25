@@ -14,4 +14,10 @@
 
     <string name="botonRegistrarse">Registrarse</string>
     <string name="botonCancelar">Cancelar</string>
+
+
+    <!-- Mensajes de error: -->
+
+    <string name="error_registro_mensaje">Por favor, revisa que se ha introducido los datos correctamente.</string>
+
 </resources>

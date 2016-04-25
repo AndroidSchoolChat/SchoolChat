@@ -53,7 +53,8 @@
         android:layout_below="@+id/ed_Contraseña"
         android:layout_toLeftOf="@+id/bt_Cancelar"
         android:layout_toStartOf="@+id/bt_Cancelar"
-        android:layout_marginTop="38dp" />
+        android:layout_marginTop="38dp"
+        android:onClick="onRegistrarse" />
 
     <Button
         android:layout_width="wrap_content"
