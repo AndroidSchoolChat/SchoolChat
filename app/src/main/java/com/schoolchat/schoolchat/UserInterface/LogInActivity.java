@@ -40,7 +40,7 @@ public class LogInActivity extends Activity {
         String password=Password.getText().toString();
         //comprobar que los campos no estan vacios
         if(username.isEmpty()||password.isEmpty()){
-            showErrorMessageToUser("Asegurate que los campos email o contraseña no esten vacios");
+            MostrarError("Asegurate que los campos email o contraseña no esten vacios");
         }else{
             //procede a la autentificacion
             Firebase autentificacionusuario=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
@@ -63,14 +63,14 @@ public class LogInActivity extends Activity {
         //la autentificacion ha ido mal
         @Override
         public void onAuthenticationError(FirebaseError firebaseError) {
-            showErrorMessageToUser(firebaseError.getMessage());
+            MostrarError(firebaseError.getMessage());
         }
     };
     //creacion de mensaje de alerta
-    private void showErrorMessageToUser(String errorMessage){
+    private void MostrarError(String error){
         AlertDialog.Builder builder=new AlertDialog.Builder(LogInActivity.this);
-        builder.setMessage(errorMessage)
-                .setTitle("Checking")
+        builder.setMessage(error)
+                .setTitle("Comprobar")
                 .setPositiveButton(android.R.string.ok,null);
         AlertDialog dialog=builder.create();
         dialog.show();
