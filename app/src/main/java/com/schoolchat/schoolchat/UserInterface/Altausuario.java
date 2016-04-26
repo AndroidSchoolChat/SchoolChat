@@ -51,7 +51,7 @@ public class Altausuario extends Activity {
         String userName=ed_NomUsu.getText().toString();
         String userpassword=ed_Cont.getText().toString();
         if(useremail.isEmpty()||userName.isEmpty()||userpassword.isEmpty()){
-            showErrorMessageToUser("asegurate de que todos los campos esten rellenos");
+            MostrarError("asegurate de que todos los campos esten rellenos");
         }else{
             final Firebase registroUsuario=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
             final String finalUserEmail=useremail;
@@ -69,11 +69,11 @@ public class Altausuario extends Activity {
                         @Override
                         public void onAuthenticated(AuthData authData) {
                             Map<String,Object> map=new HashMap<String, Object>();
-                            map.put(conexion.KEY_NAME,finalUserName);
-                            map.put(conexion.KEY_USER_EMAIL,finalUserEmail);
-                            map.put(conexion.CHILD_CONNECT,conexion.KEY_ONLINE);
+                            map.put(conexion.NOMBRE,finalUserName);
+                            map.put(conexion.USER_EMAIL,finalUserEmail);
+                            map.put(conexion.CHILD_CONNECT,conexion.ESTADO_OFFLINE);
                             Date fecha=new Date();
-                            map.put(conexion.KEY_FECHA,fecha);
+                            map.put(conexion.FECHA,fecha);
                         }
 
                         @Override
@@ -90,10 +90,10 @@ public class Altausuario extends Activity {
             });
         }
     }
-    private void showErrorMessageToUser(String errorMessage){
+    private void MostrarError(String error){
         //Create an AlertDialog to show error message
         AlertDialog.Builder builder=new AlertDialog.Builder(Altausuario.this);
-        builder.setMessage(errorMessage)
+        builder.setMessage(error)
                 .setTitle(getString(R.string.title_LogIn))
                 .setPositiveButton(android.R.string.ok, null);
         AlertDialog dialog=builder.create();
