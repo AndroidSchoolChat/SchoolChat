@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_main);
 
         /*  Referenciando el boton  */
@@ -60,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void onRegistrar(View v){
         Intent i = new Intent(this,AltaUsuario.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
 
 
