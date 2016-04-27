@@ -51,7 +51,7 @@ public class Altausuario extends Activity {
         String userName=ed_NomUsu.getText().toString();
         String userpassword=ed_Cont.getText().toString();
         if(useremail.isEmpty()||userName.isEmpty()||userpassword.isEmpty()){
-            MostrarError("asegurate de que todos los campos esten rellenos");
+            MostrarError("Asegurese de que todos los campos esten rellenos");
         }else{
             final Firebase registroUsuario=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
             final String finalUserEmail=useremail;
@@ -60,10 +60,12 @@ public class Altausuario extends Activity {
             //crear el usuario
             registroUsuario.createUser(useremail,userpassword,new Firebase.ValueResultHandler<Map<String,Object>>(){
 
+
                 @Override
                 public void onSuccess(Map<String, Object> stringObjectMap) {
 
                     Toast.makeText(Altausuario.this,"ususario creado",Toast.LENGTH_SHORT).show();
+
                     registroUsuario.authWithPassword(finalUserEmail,finalUserPassword,new Firebase.AuthResultHandler(){
 
                         @Override
@@ -72,8 +74,13 @@ public class Altausuario extends Activity {
                             map.put(conexion.NOMBRE,finalUserName);
                             map.put(conexion.USER_EMAIL,finalUserEmail);
                             map.put(conexion.CHILD_CONNECT,conexion.ESTADO_OFFLINE);
-                            Date fecha=new Date();
+
+
+                            Date fecha=new Date(); //CAMBIADO*GABRI
                             map.put(conexion.FECHA,fecha);
+
+                            registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
+
                         }
 
                         @Override
