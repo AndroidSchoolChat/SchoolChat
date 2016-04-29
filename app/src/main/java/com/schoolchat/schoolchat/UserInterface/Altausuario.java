@@ -92,11 +92,13 @@ public class Altausuario extends Activity {
 
                 @Override
                 public void onError(FirebaseError firebaseError) {
-
+                    //si el usuario tiene problemas con el registro se le notificara un error
+                    MostrarError(firebaseError.getMessage());
                 }
             });
         }
     }
+    //metodo para crear mensajes de alerta de errores
     private void MostrarError(String error){
         //Create an AlertDialog to show error message
         AlertDialog.Builder builder=new AlertDialog.Builder(Altausuario.this);

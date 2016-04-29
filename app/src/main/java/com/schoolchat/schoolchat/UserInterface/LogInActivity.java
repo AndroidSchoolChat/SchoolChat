@@ -58,6 +58,8 @@ public class LogInActivity extends Activity {
         //la autentificacion ha ido bien y se lanza la mainactivity
         public void onAuthenticated(AuthData authData) {
             Intent i=new Intent(LogInActivity.this,MainActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(i);
         }
         //la autentificacion ha ido mal
