@@ -31,6 +31,7 @@ public class Altausuario extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);     //AÑADIDO DEBIDO A QUE ES NECESARIO PARA QUE FUNCIONE FIREBASE
         setContentView(R.layout.activity_altausuario);
         botonRegistrarse = (Button) findViewById(R.id.bt_Registrarse);
         botonCancelar = (Button) findViewById(R.id.bt_Cancelar);
@@ -79,8 +80,9 @@ public class Altausuario extends Activity {
                             Date fecha=new Date(); //CAMBIADO*GABRI
                             map.put(conexion.FECHA,fecha);
 
-                            registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
+                           // registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
 
+                            registroUsuario.child("Usuarios: ").child(finalUserName).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
                         }
 
                         @Override
