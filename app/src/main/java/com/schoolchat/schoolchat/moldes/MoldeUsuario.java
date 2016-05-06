@@ -3,9 +3,12 @@ package com.schoolchat.schoolchat.moldes;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by mcb on 29/04/2016.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MoldeUsuario implements Parcelable{
     //informacion del receptor
     private String nombre;
@@ -17,11 +20,11 @@ public class MoldeUsuario implements Parcelable{
     private String Uidemisor;
     private String eEmail;
 
-    public void MoldeUsuario(){
+    public MoldeUsuario(){
 
     }
 
-    protected MoldeUsuario(Parcel in) {
+    private MoldeUsuario(Parcel in) {
         nombre = in.readString();
         Email = in.readString();
         conexion = in.readString();
