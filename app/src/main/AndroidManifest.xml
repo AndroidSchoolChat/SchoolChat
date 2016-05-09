@@ -11,6 +11,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity android:name=".UserInterface.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,23 +21,15 @@
             </intent-filter>
         </activity>
 
-        <!--
-        <activity
-            android:name=".UserInterface.MainActivity"
-            android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        -->
 
 
         <!-- actividad del LogIn -->
         <activity
             android:name=".UserInterface.LogInActivity"
             android:label="@string/title_LogIn"></activity>
+
+
         <!-- actividad del registro -->
         <activity
             android:name=".UserInterface.Altausuario"
