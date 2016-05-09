@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
     private Firebase starFirebase;
     private RecyclerView listaRecyclerView;
     private View barraProgresion;
-    private AdaptadorUsuarios adaptadorUsuarios;
+    private AdaptadorUsuarios AdaptadorUsuarios;
     private Firebase.AuthStateListener autentificar;
     private AuthData miAuthData;
     private String actualUsuarioUid;
@@ -58,11 +58,11 @@ public class MainActivity extends Activity {
         barraProgresion=findViewById(R.id.barraprogreso);
         //inicializar adaptador
         List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
-        adaptadorUsuarios=new AdaptadorUsuarios(this,listavacia);
+        AdaptadorUsuarios =new AdaptadorUsuarios(this,listavacia);
         //conectar recyclerview al adpatadorusuario
         listaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         listaRecyclerView.setHasFixedSize(true);
-        listaRecyclerView.setAdapter(adaptadorUsuarios);
+        listaRecyclerView.setAdapter(AdaptadorUsuarios);
         miListaClaveUsuarios=new ArrayList<String>();
         autentificar=new Firebase.AuthStateListener(){
 
@@ -104,11 +104,11 @@ public class MainActivity extends Activity {
                         usuario.seteEmail(actualUsuarioEmail);
                         usuario.setUidemisor(actualUsuarioUid);
                         miListaClaveUsuarios.add(Uidusuario);
-                        adaptadorUsuarios.refill(usuario);
+                        AdaptadorUsuarios.refill(usuario);
                     }else{
                         MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
                         String nombreUsuario=actualusuario.getEnombre();
-                        adaptadorUsuarios.setNombreuser(nombreUsuario);
+                        AdaptadorUsuarios.setNombreuser(nombreUsuario);
                     }
                 }
             }
@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
                         usuario.seteEmail(actualUsuarioEmail);
                         usuario.setUidemisor(actualUsuarioUid);
                         int index=miListaClaveUsuarios.indexOf(Uidusuario);
-                        adaptadorUsuarios.cambioUsuario(index,usuario);
+                        AdaptadorUsuarios.cambioUsuario(index,usuario);
                     }
                 }
             }

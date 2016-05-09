@@ -110,7 +110,7 @@ public class Altausuario extends Activity {
 
                             // registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
 
-                            registroUsuario.child("Usuarios: ").child(finalUserName).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
+                            registroUsuario.child(conexion.CHILD_USERS).child(authData.getUid()).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
                         }
 
                         @Override
@@ -164,7 +164,7 @@ public class Altausuario extends Activity {
 
                             // registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
 
-                            registroUsuario.child("Profesores: ").child(finalUserName).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
+                            registroUsuario.child("Profesores: ").child(authData.getUid()).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
                         }
 
                         @Override

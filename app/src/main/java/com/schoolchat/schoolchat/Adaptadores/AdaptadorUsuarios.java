@@ -19,31 +19,26 @@ import java.util.List;
 
 public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.ViewHolderUsuarios>{
     private List<MoldeUsuario> ListaUsuarios;
-    private Context context;
+    private Context scontext;
     private String nombreuser;
 
-    public AdaptadorUsuarios(Context contexto,List<MoldeUsuario> Usuariosfirebase){
+    public AdaptadorUsuarios(Context context,List<MoldeUsuario> Usuariosfirebase){
         ListaUsuarios=Usuariosfirebase;
-        context=contexto;
+        scontext=context;
     }
 
     @Override
     public ViewHolderUsuarios onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolderUsuarios(context, LayoutInflater.from(parent.getContext()).inflate(R.layout.perfil,parent,false));
+        return new ViewHolderUsuarios(scontext, LayoutInflater.from(parent.getContext()).inflate(R.layout.perfil,parent,false));
     }
 
-    @Override
     public void onBindViewHolder(ViewHolderUsuarios holder, int position) {
         MoldeUsuario usuarioseleccionado=ListaUsuarios.get(position);
+        System.out.println(position);
         //establecer nombre de usuario
-        holder.getNombre().setText(usuarioseleccionado.getEnombre());
+        holder.getUserName().setText(usuarioseleccionado.getNombre());
         holder.getEstadoConexion().setText(usuarioseleccionado.getConexion());
-        //poner color al estado de conexion rojo o verde
-        if(usuarioseleccionado.getConexion().equals(conexion.ESTADO_ONLINE)){
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#00FF00"));
-        }else{
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#FF0000"));
-        }
+
     }
 
     @Override
@@ -67,15 +62,15 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
     public class ViewHolderUsuarios extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nombre;
         private TextView estadoConexion;
-        private Context contexto;
-        public ViewHolderUsuarios(Context context,View view){
-            super(view);
-            nombre=(TextView)view.findViewById(R.id.nombre);
-            estadoConexion=(TextView)view.findViewById(R.id.estado);
-            contexto=context;
-            view.setOnClickListener(this);
+        private Context contextHolder;
+        public ViewHolderUsuarios(Context context,View itemView){
+            super(itemView);
+            nombre=(TextView)itemView.findViewById(R.id.nombre);
+            estadoConexion=(TextView)itemView.findViewById(R.id.estado);
+            contextHolder=context;
+            itemView.setOnClickListener(this);
         }
-        public TextView getNombre(){
+        public TextView getUserName(){
             return nombre;
         }
         public TextView getEstadoConexion(){
@@ -87,9 +82,9 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
             int posicion=getLayoutPosition();//obtine la posicion de la fila seleccionada
             MoldeUsuario usuario=ListaUsuarios.get(posicion);
             usuario.setEnombre(nombreuser);
-            Intent chat=new Intent(context,Chat.class);
-            chat.putExtra("usersData",usuario);
-            context.startActivity(chat);
+            Intent chat=new Intent(contextHolder,Chat.class);
+            chat.putExtra(conexion.INFO_USER,usuario);
+            scontext.startActivity(chat);
         }
     }
 }
