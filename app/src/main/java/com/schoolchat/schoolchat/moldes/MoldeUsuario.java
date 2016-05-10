@@ -62,8 +62,8 @@ public class MoldeUsuario implements Parcelable{
         }
         return chatref;
     }
-    private long fechaemisor(){return Long.valueOf(geteCreado());}
-    private long fechareceptor(){return Long.valueOf(getCreado());}
+    private long fechaemisor(){return Long.parseLong(geteCreado());}
+    private long fechareceptor(){return Long.parseLong(getCreado());}
     private String limpiarEamil(String mail){
         return mail.replace(".","-");
     }
@@ -72,11 +72,13 @@ public class MoldeUsuario implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nombre);
         dest.writeString(Email);
+        dest.writeString(creado);
         dest.writeString(conexion);
         dest.writeString(Uidreceptor);
         dest.writeString(enombre);
         dest.writeString(Uidemisor);
         dest.writeString(eEmail);
+        dest.writeString(eCreado);
     }
 
     @Override
