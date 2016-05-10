@@ -108,7 +108,8 @@ public class MainActivity extends Activity {
                     }else{
                         MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
                         String nombreUsuario=actualusuario.getEnombre();
-                        AdaptadorUsuarios.setNombreuser(nombreUsuario);
+                        String creado=actualusuario.geteCreado();
+                        AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
                     }
                 }
             }

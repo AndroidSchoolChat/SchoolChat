@@ -21,6 +21,7 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
     private List<MoldeUsuario> ListaUsuarios;
     private Context scontext;
     private String nombreuser;
+    private String fechacreacion;
 
     public AdaptadorUsuarios(Context context,List<MoldeUsuario> Usuariosfirebase){
         ListaUsuarios=Usuariosfirebase;
@@ -31,10 +32,9 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
     public ViewHolderUsuarios onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolderUsuarios(scontext, LayoutInflater.from(parent.getContext()).inflate(R.layout.perfil,parent,false));
     }
-
+    @Override
     public void onBindViewHolder(ViewHolderUsuarios holder, int position) {
         MoldeUsuario usuarioseleccionado=ListaUsuarios.get(position);
-        System.out.println(position);
         //establecer nombre de usuario
         holder.getUserName().setText(usuarioseleccionado.getNombre());
         holder.getEstadoConexion().setText(usuarioseleccionado.getConexion());
@@ -51,8 +51,9 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
         notifyDataSetChanged();
     }
 
-    public void setNombreuser(String nombreUser){
+    public void setNombre_Fechauser(String nombreUser,String fecha){
         nombreuser=nombreUser;
+        fechacreacion=fecha;
     }
 
     public void cambioUsuario(int index,MoldeUsuario usuario){
@@ -82,9 +83,10 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
             int posicion=getLayoutPosition();//obtine la posicion de la fila seleccionada
             MoldeUsuario usuario=ListaUsuarios.get(posicion);
             usuario.setEnombre(nombreuser);
+            usuario.seteCreado(fechacreacion);
             Intent chat=new Intent(contextHolder,Chat.class);
             chat.putExtra(conexion.INFO_USER,usuario);
-            scontext.startActivity(chat);
+            contextHolder.startActivity(chat);
         }
     }
 }
