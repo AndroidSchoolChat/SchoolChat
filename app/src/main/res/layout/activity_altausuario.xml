@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,21 +20,19 @@
                     android:inputType="textEmailAddress"
                     android:ems="10"
                     android:id="@+id/ed_Email"
-                    android:layout_centerHorizontal="true"
                     android:hint="Correo"
-                    android:layout_marginTop="50dp" />
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true" />
 
                 <EditText
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:ems="10"
                     android:id="@+id/ed_NombreUsuario"
                     android:hint="@string/textDefNomUsu"
                     android:layout_below="@+id/ed_Email"
                     android:layout_alignLeft="@+id/ed_Email"
-                    android:layout_alignStart="@+id/ed_Email"
-                    android:layout_marginTop="30dp"
-                    android:layout_alignRight="@+id/ed_Email"
-                    android:layout_alignEnd="@+id/ed_Email" />
+                    android:layout_alignStart="@+id/ed_Email" />
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -43,19 +43,18 @@
                     android:hint="@string/textDefContr"
                     android:layout_below="@+id/ed_NombreUsuario"
                     android:layout_alignLeft="@+id/ed_NombreUsuario"
-                    android:layout_alignStart="@+id/ed_NombreUsuario"
-                    android:layout_marginTop="30dp" />
+                    android:layout_alignStart="@+id/ed_NombreUsuario" />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/bt_Registrarse"
                     android:text="@string/registro"
-                    android:layout_below="@+id/ed_Contraseña"
-                    android:layout_toLeftOf="@+id/bt_Cancelar"
-                    android:layout_toStartOf="@+id/bt_Cancelar"
-                    android:layout_marginTop="38dp"
-                    android:onClick="onSign"/>
+                    android:onClick="onSign"
+                    android:layout_alignBaseline="@+id/bt_Cancelar"
+                    android:layout_alignBottom="@+id/bt_Cancelar"
+                    android:layout_alignLeft="@+id/ed_Contraseña"
+                    android:layout_alignStart="@+id/ed_Contraseña" />
 
     <Button
         android:layout_width="wrap_content"
@@ -65,10 +64,43 @@
         android:onClick="onCancelar"
 
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignRight="@+id/ed_Contraseña"
+        android:layout_alignEnd="@+id/ed_Contraseña"
+        android:layout_marginBottom="61dp" />
 
-            </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="¿Eres profesor?"
+        android:id="@+id/tv_pregunta"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/ed_Contraseña"
+        android:layout_toLeftOf="@+id/bt_Cancelar"
+        android:layout_toStartOf="@+id/bt_Cancelar" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cb_Profesor"
+        android:onClick="onProfesor"
+        android:layout_alignTop="@+id/tv_pregunta"
+        android:layout_toRightOf="@+id/ed_ContraseñaVerif"
+        android:layout_toEndOf="@+id/ed_ContraseñaVerif"
+        android:layout_alignBaseline="@+id/tv_pregunta" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:id="@+id/ed_ContraseñaVerif"
+        android:hint="@string/textContrVerif"
+        android:visibility="invisible"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp" />
+
+</RelativeLayout>
 
 
 

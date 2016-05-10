@@ -18,4 +18,6 @@
     <string name="textDefNomUsu">Nombre de Usuario</string>
     <string name="textDefContr">Contraseña</string>
     <string name="botonCancelar">Cancelar</string>
+    <string name="textContrVerif">Verificacion</string>
+
 </resources>

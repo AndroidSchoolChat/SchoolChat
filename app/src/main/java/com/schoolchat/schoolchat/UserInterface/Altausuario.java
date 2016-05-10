@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -26,9 +27,14 @@ public class Altausuario extends Activity {
 
     private Button botonRegistrarse;
     private Button botonCancelar;
+
     private EditText ed_Em;
     private EditText ed_NomUsu;
     private EditText ed_Cont;
+
+
+    private EditText ed_ContVerif;
+    private CheckBox cb_Profesor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +51,24 @@ public class Altausuario extends Activity {
         ed_Cont = (EditText) findViewById(R.id.ed_Contraseña);
 
 
+        //Verificacion si es profesor:
+        ed_ContVerif = (EditText) findViewById(R.id.ed_ContraseñaVerif);
+        cb_Profesor = (CheckBox) findViewById(R.id.cb_Profesor);
+
+
+
+
+
+    }
+
+
+    //Muestra el campo de la contraseña de verificacion si el checkbox esta seleccionado
+    public void onProfesor(View v){
+        if (cb_Profesor.isChecked()){
+            ed_ContVerif.setVisibility(View.VISIBLE);
+        }else{
+            ed_ContVerif.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -88,6 +112,11 @@ public class Altausuario extends Activity {
                             // registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
 
                             registroUsuario.child(conexion.CHILD_USERS).child(authData.getUid()).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
+
+                            Intent return_login= new Intent(Altausuario.this,LogInActivity.class);
+                            return_login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            return_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(return_login);
                         }
 
                         @Override
