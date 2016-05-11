@@ -75,64 +75,136 @@ public class Altausuario extends Activity {
 
     /*  Accion a realizar al pulsar en REGISTRAR: Ir a la actividad MainActivity
       * y crear un nuevo usuario en la base de datos de firebase */
-    public void onSign(View v){
-        //variables para registro pasadas a string
-        String useremail=ed_Em.getText().toString();
-        String userName=ed_NomUsu.getText().toString();
-        String userpassword=ed_Cont.getText().toString();
-        if(useremail.isEmpty()||userName.isEmpty()||userpassword.isEmpty()){
-            MostrarError("Asegurese de que todos los campos esten rellenos");
+
+    public void onSign(View v) {
+
+        //**--Codigo para el registro del PROFESOR:--*
+
+        if (cb_Profesor.isChecked()) {
+
+            //variables para registro pasadas a string
+            String useremailProf = ed_Em.getText().toString();
+            String userNameProf = ed_NomUsu.getText().toString();
+            String userpasswordProf = ed_Cont.getText().toString();
+            if (useremailProf.isEmpty() || userNameProf.isEmpty() || userpasswordProf.isEmpty()) {
+                MostrarError("Asegurese de que todos los campos esten rellenos");
+            } else {
+                final Firebase registroUsuario = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                final String finalUserEmail = useremailProf;
+                final String finalUserPassword = userpasswordProf;
+                final String finalUserName = userNameProf;
+
+                //crear el usuario
+                registroUsuario.createUser(useremailProf, userpasswordProf, new Firebase.ValueResultHandler<Map<String, Object>>() {
+
+
+                    @Override
+                    public void onSuccess(Map<String, Object> stringObjectMap) {
+
+                        Toast.makeText(Altausuario.this, "Se ha registrado un nuevo profesor.", Toast.LENGTH_SHORT).show();
+
+                        registroUsuario.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
+
+                            @Override
+                            public void onAuthenticated(AuthData authData) {
+                                Map<String, Object> map = new HashMap<String, Object>();
+                                map.put(conexion.NOMBRE, finalUserName);
+                                map.put(conexion.USER_EMAIL, finalUserEmail);
+                                map.put(conexion.CHILD_CONNECT, conexion.ESTADO_OFFLINE);
+
+
+                                Date fecha = new Date(); //CAMBIADO*GABRI
+                                map.put(conexion.FECHA, fecha);
+
+
+                                registroUsuario.child("Profesores:").child(authData.getUid()).setValue(map); //Añade los datos a Firebase en la pestaña de PROFESOR
+
+                                Intent return_login = new Intent(Altausuario.this, LogInActivity.class);
+                                return_login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                return_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(return_login);
+                            }
+
+                            @Override
+                            public void onAuthenticationError(FirebaseError firebaseError) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onError(FirebaseError firebaseError) {
+                        //si el usuario tiene problemas con el registro se le notificara un error
+                        MostrarError(firebaseError.getMessage());
+                    }
+                });
+            }
         }else{
-            final Firebase registroUsuario=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-            final String finalUserEmail=useremail;
-            final String finalUserPassword=userpassword;
-            final String finalUserName=userName;
-            //crear el usuario
-            registroUsuario.createUser(useremail,userpassword,new Firebase.ValueResultHandler<Map<String,Object>>(){
+
+         //**--Codigo para el registro del ALUMNO:--*
+
+            //variables para registro pasadas a string
+            String useremailAlum = ed_Em.getText().toString();
+            String userNameAlum = ed_NomUsu.getText().toString();
+            String userpasswordAlum = ed_Cont.getText().toString();
+            if (useremailAlum.isEmpty() || userNameAlum.isEmpty() || userpasswordAlum.isEmpty()) {
+                MostrarError("Asegurese de que todos los campos esten rellenos");
+            } else {
+                final Firebase registroUsuario = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                final String finalUserEmail = useremailAlum;
+                final String finalUserPassword = userpasswordAlum;
+                final String finalUserName = userNameAlum;
+
+                //crear el usuario
+                registroUsuario.createUser(useremailAlum, userpasswordAlum, new Firebase.ValueResultHandler<Map<String, Object>>() {
 
 
-                @Override
-                public void onSuccess(Map<String, Object> stringObjectMap) {
+                    @Override
+                    public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                    Toast.makeText(Altausuario.this,"ususario creado",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Altausuario.this, "Se ha registrado un nuevo alumno", Toast.LENGTH_SHORT).show();
 
-                    registroUsuario.authWithPassword(finalUserEmail,finalUserPassword,new Firebase.AuthResultHandler(){
+                        registroUsuario.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
 
-                        @Override
-                        public void onAuthenticated(AuthData authData) {
-                            Map<String,Object> map=new HashMap<String, Object>();
-                            map.put(conexion.NOMBRE,finalUserName);
-                            map.put(conexion.USER_EMAIL,finalUserEmail);
-                            map.put(conexion.CHILD_CONNECT,conexion.ESTADO_OFFLINE);
+                            @Override
+                            public void onAuthenticated(AuthData authData) {
+                                Map<String, Object> map = new HashMap<String, Object>();
+                                map.put(conexion.NOMBRE, finalUserName);
+                                map.put(conexion.USER_EMAIL, finalUserEmail);
+                                map.put(conexion.CHILD_CONNECT, conexion.ESTADO_OFFLINE);
 
 
-                            Date fecha=new Date(); //CAMBIADO*GABRI
-                            map.put(conexion.FECHA,fecha);
+                                Date fecha = new Date(); //CAMBIADO*GABRI
+                                map.put(conexion.FECHA, fecha);
 
-                            // registroUsuario.child("Usuarios: ").child(authData.getUid()).setValue(map); //CAMBIO*GABRI -- Esta linea añade en la pestaña DATA, los datos recogidos del nuevo usuario.
 
-                            registroUsuario.child(conexion.CHILD_USERS).child(authData.getUid()).setValue(map); //CAMBIADO PARA QUE SE MUESTRE EL NOMBRE DE USUARIO EN VEZ DE EL UID!!
+                                registroUsuario.child("Alumnos:").child(authData.getUid()).setValue(map); //Añade datos en la pestaña de ALUMNO.
 
-                            Intent return_login= new Intent(Altausuario.this,LogInActivity.class);
-                            return_login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            return_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(return_login);
-                        }
+                                Intent return_login = new Intent(Altausuario.this, LogInActivity.class);
+                                return_login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                return_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(return_login);
+                            }
 
-                        @Override
-                        public void onAuthenticationError(FirebaseError firebaseError) {
+                            @Override
+                            public void onAuthenticationError(FirebaseError firebaseError) {
 
-                        }
-                    });
-                }
+                            }
+                        });
+                    }
 
-                @Override
-                public void onError(FirebaseError firebaseError) {
-                    //si el usuario tiene problemas con el registro se le notificara un error
-                    MostrarError(firebaseError.getMessage());
-                }
-            });
+                    @Override
+                    public void onError(FirebaseError firebaseError) {
+                        //si el usuario tiene problemas con el registro se le notificara un error
+                        MostrarError(firebaseError.getMessage());
+                    }
+                });
+            }
+
+
         }
+
+
     }
 
 
@@ -146,6 +218,7 @@ public class Altausuario extends Activity {
         AlertDialog dialog=builder.create();
         dialog.show();
     }
+
     //la accion de cancelar te devuelve al la actividad de LogIn
     public void onCancelar(View v){
         Intent j = new Intent(this,LogInActivity.class);
