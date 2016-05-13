@@ -20,4 +20,7 @@
     <string name="botonCancelar">Cancelar</string>
     <string name="textContrVerif">Verificacion</string>
 
+    <string name="CorrectoProf">Profesor nuevo creado.</string>
+
+    <string name="errorVerif">La contraseña de verificacion no es correcta. Vuelva a intentarlo.</string>
 </resources>

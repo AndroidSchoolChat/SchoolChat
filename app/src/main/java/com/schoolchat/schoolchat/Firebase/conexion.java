@@ -8,6 +8,7 @@ public class conexion {
     public static final String CHILD_CHAT="Chat";
     public static final String CHILD_CONNECT="Conexion";
     public static final String INFO_USER="userData";
+
     //estos seran los campos que se guardaran con cada usuario en la base de datos
     public static final String KEY_EMAIL="email";
     public static final String NOMBRE="Nombre";
