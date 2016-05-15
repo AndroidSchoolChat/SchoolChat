@@ -36,8 +36,13 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
     public void onBindViewHolder(ViewHolderUsuarios holder, int position) {
         MoldeUsuario usuarioseleccionado=ListaUsuarios.get(position);
         //establecer nombre de usuario
-        holder.getUserName().setText(usuarioseleccionado.getNombre());
-        holder.getEstadoConexion().setText(usuarioseleccionado.getConexion());
+        holder.getUserName().setText(usuarioseleccionado.getnombre());
+        holder.getEstadoConexion().setText(usuarioseleccionado.getconexion());
+        if(usuarioseleccionado.getconexion().equals(conexion.ESTADO_ONLINE)){
+            holder.getEstadoConexion().setTextColor(Color.parseColor("#00FF00"));
+        }else{
+            holder.getEstadoConexion().setTextColor(Color.parseColor("#FF0000"));
+        }
 
     }
 

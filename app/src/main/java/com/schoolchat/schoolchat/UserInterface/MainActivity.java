@@ -89,14 +89,15 @@ public class MainActivity extends Activity {
     }
     private void consultaUsuariosFirebase(){
         MostrarBarraProgreso();
-        listaUsuarios=ramaUsuarios.limitToFirst(50).addChildEventListener(new ChildEventListener() {
+        listaUsuarios=ramaUsuarios.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ocultarBarraPrograso();
                 if(dataSnapshot.exists()){
+                    //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
                     String Uidusuario=dataSnapshot.getKey();
                     if(!Uidusuario.equals(actualUsuarioUid)){
-                        //obtener nombre de receptor
+                        //obtener datos del receptor que estan firebase
                         MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
                         //añadir uid del receptor
                         usuario.setUidreceptor(Uidusuario);
@@ -106,14 +107,15 @@ public class MainActivity extends Activity {
                         miListaClaveUsuarios.add(Uidusuario);
                         AdaptadorUsuarios.refill(usuario);
                     }else{
+                        //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
                         MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getEnombre();
-                        String creado=actualusuario.geteCreado();
+                        String nombreUsuario=actualusuario.getnombre();
+                        String creado=actualusuario.getcreado();
                         AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
                     }
                 }
             }
-
+            //si el hay cambios en firebase sobre un usuario esto lo resgistra
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if(dataSnapshot.exists()){
@@ -167,12 +169,14 @@ public class MainActivity extends Activity {
             }
         });
     }
+    //metodo para ir al login
     protected void irLogin(){
         Intent intent=new Intent(this,LogInActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+    //muestra y oculta el circulo de progrogeso que se muetra hasta que se cargan los datos en la actividad
     private void MostrarBarraProgreso(){
         barraProgresion.setVisibility(View.VISIBLE);
     }
@@ -225,6 +229,7 @@ public class MainActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
+    //metodo para acabar la sesion
     private void logout(){
         if(this.miAuthData!=null){
             EstadoConexion.setValue(conexion.ESTADO_OFFLINE);

@@ -1,6 +1,10 @@
 package com.schoolchat.schoolchat.UserInterface;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -52,7 +56,8 @@ public class Chat extends Activity {
         Uidemisor=DatosUsuariosMolde.getUidemisor();
         //establecer adaptador para chat
         recyclerViewChat=(RecyclerView)findViewById(R.id.chat_recycler_view);
-        mensajeTV=(TextView)findViewById(R.id.Enviarmensaje);
+        //asignar el edittext a un textview
+        mensajeTV=(TextView)findViewById(R.id.textoenviar);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setHasFixedSize(true);
         List<MoldeMensajes> chatvacio=new ArrayList<MoldeMensajes>();
@@ -76,6 +81,7 @@ public class Chat extends Activity {
         FirebaseChatListener=FirebaseChat.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                //establece quie es el emisor y el receptor
                 if(dataSnapshot.exists()){
                     MoldeMensajes nuevomensaje=dataSnapshot.getValue(MoldeMensajes.class);
                     if(nuevomensaje.getEmisor().equals(Uidemisor)){
@@ -123,6 +129,7 @@ public class Chat extends Activity {
         }
         adaptadorConversacion.cleanUp();
     }
+    //evento para enviar mensajes
     public void botonenviar(View view){
         String enviarmensaje=mensajeTV.getText().toString();
         enviarmensaje=enviarmensaje.trim();
@@ -135,4 +142,5 @@ public class Chat extends Activity {
             mensajeTV.setText("");
         }
     }
+
 }

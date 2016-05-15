@@ -233,8 +233,8 @@ public class Altausuario extends Activity {
                                 map.put(conexion.FECHA, fecha);
 
 
-                                registroUsuario.child("Alumnos:").child(authData.getUid()).setValue(map); //Añade datos en la pestaña de ALUMNO.
-
+                                //comento esto de momento registroUsuario.child("Alumnos:").child(authData.getUid()).setValue(map); //Añade datos en la pestaña de ALUMNO.
+                                registroUsuario.child(conexion.CHILD_USERS).child(authData.getUid()).setValue(map); //Añade datos en la pestaña de usuarios.
 
 
                                 Intent return_login = new Intent(Altausuario.this, LogInActivity.class);

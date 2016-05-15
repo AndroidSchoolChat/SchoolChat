@@ -9,7 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class MoldeUsuario implements Parcelable{
     //informacion del receptor
     private String nombre;
-    private String Email;
+    private String email;
     private String creado;
     private String conexion;
     private String Uidreceptor;
@@ -25,7 +25,7 @@ public class MoldeUsuario implements Parcelable{
 
     private MoldeUsuario(Parcel in) {
         nombre = in.readString();
-        Email = in.readString();
+        email = in.readString();
         creado=in.readString();
         conexion = in.readString();
         Uidreceptor = in.readString();
@@ -35,10 +35,10 @@ public class MoldeUsuario implements Parcelable{
         eCreado=in.readString();
     }
     //informacion del receptor
-    public String getNombre(){return nombre;}
-    public String getEmail(){return Email;}
-    public String getCreado(){return creado;}
-    public String getConexion(){return conexion;}
+    public String getnombre(){return nombre;}
+    public String getemail(){return email;}
+    public String getcreado(){return creado;}
+    public String getconexion(){return conexion;}
     public String getUidreceptor(){return Uidreceptor;}
     public void setUidreceptor(String Uidreceptor){this.Uidreceptor=Uidreceptor;}
     //informacion del emisor
@@ -56,14 +56,14 @@ public class MoldeUsuario implements Parcelable{
     private String createuniquechatref(){
         String chatref="";
         if(fechaemisor()>fechareceptor()){
-            chatref=limpiarEamil(geteEmail())+"-"+limpiarEamil(getEmail());
+            chatref=limpiarEamil(geteEmail())+"-"+limpiarEamil(getemail());
         }else {
-            chatref=limpiarEamil(getEmail())+"-"+limpiarEamil(geteEmail());
+            chatref=limpiarEamil(getemail())+"-"+limpiarEamil(geteEmail());
         }
         return chatref;
     }
     private long fechaemisor(){return Long.parseLong(geteCreado());}
-    private long fechareceptor(){return Long.parseLong(getCreado());}
+    private long fechareceptor(){return Long.parseLong(getcreado());}
     private String limpiarEamil(String mail){
         return mail.replace(".","-");
     }
@@ -71,7 +71,7 @@ public class MoldeUsuario implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nombre);
-        dest.writeString(Email);
+        dest.writeString(email);
         dest.writeString(creado);
         dest.writeString(conexion);
         dest.writeString(Uidreceptor);

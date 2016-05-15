@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/divider"
         />
-
+<!--este view sirce para dividir la pantlla-->
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -34,13 +34,13 @@
         android:paddingTop="8dp">
 
         <EditText
-            android:id="@+id/mensajesenviados"
+            android:id="@+id/textoenviar"
             android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#555555"
             android:textSize="14sp"
-            android:hint="Type your message"
+            android:hint="escribe tu mensaje"
             android:gravity="top"
             android:layout_toStartOf="@+id/Enviarmensaje"
             android:layout_toLeftOf="@+id/Enviarmensaje" />
@@ -50,11 +50,12 @@
             android:textColor="#FFFFFF"
             android:layout_width="72dp"
             android:layout_height="40dp"
-            android:text="Send"
+            android:text="enviar"
             android:background="#458bff"
             android:onClick="botonenviar"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentRight="true"
+            />
     </RelativeLayout>
 
     <ProgressBar
