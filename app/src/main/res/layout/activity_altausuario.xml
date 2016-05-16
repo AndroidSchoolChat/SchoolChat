@@ -45,50 +45,6 @@
                     android:layout_alignLeft="@+id/ed_NombreUsuario"
                     android:layout_alignStart="@+id/ed_NombreUsuario" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/bt_Registrarse"
-                    android:text="@string/registro"
-                    android:onClick="onSign"
-                    android:layout_alignBaseline="@+id/bt_Cancelar"
-                    android:layout_alignBottom="@+id/bt_Cancelar"
-                    android:layout_alignLeft="@+id/ed_Contraseña"
-                    android:layout_alignStart="@+id/ed_Contraseña" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/botonCancelar"
-        android:id="@+id/bt_Cancelar"
-        android:onClick="onCancelar"
-
-        android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/ed_Contraseña"
-        android:layout_alignEnd="@+id/ed_Contraseña"
-        android:layout_marginBottom="61dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="¿Eres profesor?"
-        android:id="@+id/tv_pregunta"
-        android:layout_marginTop="40dp"
-        android:layout_below="@+id/ed_Contraseña"
-        android:layout_toLeftOf="@+id/bt_Cancelar"
-        android:layout_toStartOf="@+id/bt_Cancelar" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cb_Profesor"
-        android:onClick="onProfesor"
-        android:layout_alignTop="@+id/tv_pregunta"
-        android:layout_toRightOf="@+id/ed_ContraseñaVerif"
-        android:layout_toEndOf="@+id/ed_ContraseñaVerif"
-        android:layout_alignBaseline="@+id/tv_pregunta" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,9 +52,50 @@
         android:id="@+id/ed_ContraseñaVerif"
         android:hint="@string/textContrVerif"
         android:visibility="invisible"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp" />
+        android:layout_below="@+id/cb_Profesor"
+        android:layout_alignLeft="@+id/tv_pregunta"
+        android:layout_alignStart="@+id/tv_pregunta" />
+       " />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="¿Eres profesor?"
+        android:id="@+id/tv_pregunta"
+        android:layout_below="@+id/ed_Contraseña"
+        android:layout_alignLeft="@+id/ed_Contraseña"
+        android:layout_alignStart="@+id/ed_Contraseña"
+        android:layout_marginTop="25dp" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cb_Profesor"
+        android:onClick="onProfesor"
+        android:layout_alignTop="@+id/tv_pregunta"
+        android:layout_alignRight="@+id/ed_Contraseña"
+        android:layout_alignEnd="@+id/ed_Contraseña" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/bt_Registrarse"
+        android:text="@string/registro"
+        android:onClick="onSign"
+        android:layout_below="@+id/ed_ContraseñaVerif"
+        android:layout_alignLeft="@+id/ed_ContraseñaVerif"
+        android:layout_alignStart="@+id/ed_ContraseñaVerif" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/botonCancelar"
+        android:id="@+id/bt_Cancelar"
+        android:onClick="onCancelar"
+        android:layout_below="@+id/ed_ContraseñaVerif"
+        android:layout_alignRight="@+id/cb_Profesor"
+        android:layout_alignEnd="@+id/cb_Profesor" />
 
 
 </RelativeLayout>

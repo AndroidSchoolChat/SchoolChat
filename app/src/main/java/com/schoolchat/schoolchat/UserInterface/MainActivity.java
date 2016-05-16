@@ -3,6 +3,7 @@ package com.schoolchat.schoolchat.UserInterface;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
@@ -25,12 +26,11 @@ import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 //clase para la vista de los usuarios / grupos de la aplicacion
 
     private Firebase starFirebase;
     private RecyclerView listaRecyclerView;
-    private View barraProgresion;
     private AdaptadorUsuarios AdaptadorUsuarios;
     private Firebase.AuthStateListener autentificar;
     private AuthData miAuthData;
@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
         //refencia al recyclerview
         listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
         //referencia a barra de prograsion
-        barraProgresion=findViewById(R.id.barraprogreso);
+
         //inicializar adaptador
         List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
         AdaptadorUsuarios =new AdaptadorUsuarios(this,listavacia);
@@ -88,11 +88,11 @@ public class MainActivity extends Activity {
         }
     }
     private void consultaUsuariosFirebase(){
-        MostrarBarraProgreso();
+
         listaUsuarios=ramaUsuarios.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ocultarBarraPrograso();
+
                 if(dataSnapshot.exists()){
                     //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
                     String Uidusuario=dataSnapshot.getKey();
@@ -176,15 +176,7 @@ public class MainActivity extends Activity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
-    //muestra y oculta el circulo de progrogeso que se muetra hasta que se cargan los datos en la actividad
-    private void MostrarBarraProgreso(){
-        barraProgresion.setVisibility(View.VISIBLE);
-    }
-    private void ocultarBarraPrograso(){
-        if(barraProgresion.getVisibility()==View.VISIBLE){
-            barraProgresion.setVisibility(View.GONE);
-        }
-    }
+
     @Override
     protected void onResume() {
         super.onResume();

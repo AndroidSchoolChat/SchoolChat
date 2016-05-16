@@ -28,7 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Chat extends Activity {
+public class Chat extends AppCompatActivity {
     private RecyclerView recyclerViewChat;
     private TextView mensajeTV;
     private AdaptadorConversacion adaptadorConversacion;
