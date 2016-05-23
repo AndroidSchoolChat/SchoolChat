@@ -11,8 +11,9 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-    tools:context="com.schoolchat.schoolchat.UserInterface.Altausuario">
-
+    tools:context="com.schoolchat.schoolchat.UserInterface.Altausuario"
+    android:id="@+id/root"
+   >
 
                 <EditText
                     android:layout_width="wrap_content"
@@ -22,7 +23,8 @@
                     android:id="@+id/ed_Email"
                     android:hint="Correo"
                     android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true" />
+                    android:layout_centerHorizontal="true"
+                    />
 
                 <EditText
                     android:layout_width="wrap_content"

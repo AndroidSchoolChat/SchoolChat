@@ -1,23 +1,15 @@
 package com.schoolchat.schoolchat.UserInterface;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TabHost;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.firebase.client.AuthData;
-import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -43,6 +35,7 @@ public class Altausuario extends AppCompatActivity {
     private CheckBox cb_Profesor;
 
     public String verif;
+    View rootView;
 
 
     @Override
@@ -50,7 +43,8 @@ public class Altausuario extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);     //AÑADIDO DEBIDO A QUE ES NECESARIO PARA QUE FUNCIONE FIREBASE
         setContentView(R.layout.activity_altausuario);
-
+        //para poder usar snackBar
+        rootView=findViewById(R.id.root);
 
         botonRegistrarse = (Button) findViewById(R.id.bt_Registrarse);
         botonCancelar = (Button) findViewById(R.id.bt_Cancelar);
@@ -104,7 +98,7 @@ public class Altausuario extends AppCompatActivity {
                 //Conexion a FireBase para recuperar el valor de la contraseña de verificacion:
 
                 final Firebase FireBaseDatos = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-                FireBaseDatos.addValueEventListener(new ValueEventListener(){
+                FireBaseDatos.addListenerForSingleValueEvent(new ValueEventListener(){
                     public void onDataChange(DataSnapshot snapshot) {
 
                         verif = (String) snapshot.child("VerifyPassword").child("pass").getValue();
@@ -132,7 +126,7 @@ public class Altausuario extends AppCompatActivity {
                                     errorVerif.setPositiveButton(android.R.string.ok,null);
                                     errorVerif.show();
 */
-                                    Toast.makeText(Altausuario.this, "Se ha registrado un nuevo profesor.", Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_SHORT).show();
 
                                     registroProfesor.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
 
@@ -148,7 +142,7 @@ public class Altausuario extends AppCompatActivity {
                                             map.put(conexion.FECHA, fecha);
 
 
-                                            registroProfesor.child("Profesores:").child(authData.getUid()).setValue(map); //Añade los datos a Firebase en la pestaña de PROFESOR
+                                            registroProfesor.child(conexion.CHILD_PROFE).child(authData.getUid()).setValue(map); //Añade los datos a Firebase en la pestaña de PROFESOR
 
 
 
@@ -218,7 +212,7 @@ public class Altausuario extends AppCompatActivity {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                        Toast.makeText(Altausuario.this, "Se ha registrado un nuevo alumno", Toast.LENGTH_SHORT).show();
+                         Snackbar.make(rootView, "Se ha registrado un nuevo alumno", Snackbar.LENGTH_SHORT).show();
 
                         registroUsuario.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
 

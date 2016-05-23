@@ -1,7 +1,5 @@
 package com.schoolchat.schoolchat.UserInterface;
 
-import android.app.Activity;
-
 import com.firebase.client.AuthData;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
