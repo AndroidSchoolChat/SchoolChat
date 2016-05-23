@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "844877613971",
+    "firebase_url": "https://schoolchatandroid.firebaseio.com",
+    "project_id": "project-6611642041845772108",
+    "storage_bucket": "project-6611642041845772108.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:844877613971:android:fafa3197a0b912bf",
+        "android_client_info": {
+          "package_name": "com.schoolchat.schoolchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "844877613971-vrduq5h4s91ij859845dg7ak16prl6cn.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "844877613971-f1p7ol6soltmblt3dvpl5v0mbtopetbi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCcmlHHUmgZuek8NnE3ZNhLaLgESrpcJLw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

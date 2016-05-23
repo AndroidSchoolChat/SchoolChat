@@ -1,15 +1,14 @@
 package com.schoolchat.schoolchat.UserInterface;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
@@ -37,25 +36,29 @@ public class MainActivity extends AppCompatActivity {
     private String actualUsuarioUid;
     private String actualUsuarioEmail;
     private Firebase ramaUsuarios;
+    private Firebase ramaProfesores;
     private ChildEventListener listaUsuarios;
+    private ChildEventListener listaProfesores;
     private ArrayList<String> miListaClaveUsuarios;
     private Firebase EstadoConexion;
+    private Firebase estadoConexionProfe, estadoConexionUser;
     private ValueEventListener cambioconexion;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        //para poder usar snackBar
+        rootView=findViewById(R.id.root);
         //Iniciamos Firebase
         starFirebase.setAndroidContext(this);
         starFirebase=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
         //rama usuarios
         ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_USERS);
+        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_PROFE);
         //refencia al recyclerview
         listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
-        //referencia a barra de prograsion
-
         //inicializar adaptador
         List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
         AdaptadorUsuarios =new AdaptadorUsuarios(this,listavacia);
@@ -83,11 +86,14 @@ public class MainActivity extends AppCompatActivity {
             //obtener su email
             actualUsuarioEmail=(String)authData.getProviderData().get(conexion.KEY_EMAIL);
             consultaUsuariosFirebase();
+            consultaProfesorFirebase();
+
         }else{
             irLogin();
         }
     }
     private void consultaUsuariosFirebase(){
+
 
         listaUsuarios=ramaUsuarios.addChildEventListener(new ChildEventListener() {
             @Override
@@ -150,16 +156,15 @@ public class MainActivity extends AppCompatActivity {
         EstadoConexion=ramaUsuarios.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
         //listener para cuando cambia el estado de conexion
         cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean conectado=(Boolean)dataSnapshot.getValue();
-                if(conectado){
+                boolean conectado = (Boolean) dataSnapshot.getValue();
+                if (conectado) {
                     EstadoConexion.setValue(conexion.ESTADO_ONLINE);
                     //si el usuario se desconecta
                     EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
-                    Toast.makeText(MainActivity.this,"conectado",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(MainActivity.this,"desconectado",Toast.LENGTH_SHORT).show();
+                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
                 }
             }
 
@@ -168,7 +173,91 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
+    private void consultaProfesorFirebase(){
+        listaProfesores=ramaProfesores.addChildEventListener(new ChildEventListener(){
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s){
+                if(dataSnapshot.exists()){
+                    //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
+                    String Uidprofe=dataSnapshot.getKey();
+                    if(!Uidprofe.equals(actualUsuarioUid)){
+                        //obtener datos del receptor que estan firebase
+                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
+                        //añadir uid del receptor
+                        usuario.setUidreceptor(Uidprofe);
+                        //añadir informacion del actual usuario emisor
+                        usuario.seteEmail(actualUsuarioEmail);
+                        usuario.setUidemisor(actualUsuarioUid);
+                        miListaClaveUsuarios.add(Uidprofe);
+                        AdaptadorUsuarios.refill(usuario);
+                    }else{
+                        //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
+                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
+                        String nombreUsuario=actualusuario.getnombre();
+                        String creado=actualusuario.getcreado();
+                        AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
+                    }
+                }
+            }
+            //si el hay cambios en firebase sobre un usuario esto lo resgistra
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.exists()) {
+                    String Uidprofe = dataSnapshot.getKey();
+                    if (!Uidprofe.equals(actualUsuarioUid)) {
+                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
+                        usuario.setUidreceptor(Uidprofe);
+                        usuario.seteEmail(actualUsuarioEmail);
+                        usuario.setUidemisor(actualUsuarioUid);
+                        int index = miListaClaveUsuarios.indexOf(Uidprofe);
+                        AdaptadorUsuarios.cambioUsuario(index, usuario);
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+        //guarda el estado de conexion del usuario
+        EstadoConexion=ramaProfesores.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
+        //listener para cuando cambia el estado de conexion
+        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean conectado = (Boolean) dataSnapshot.getValue();
+                if (conectado) {
+                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
+                    //si el usuario se desconecta
+                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
+                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
+                } else {
+                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
+    }
+
     //metodo para ir al login
     protected void irLogin(){
         Intent intent=new Intent(this,LogInActivity.class);

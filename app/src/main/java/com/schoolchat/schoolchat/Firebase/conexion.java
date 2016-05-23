@@ -5,6 +5,7 @@ public class conexion {
     public static final String FIREBASE_SCHOOLCHAT="https://schoolchatandroid.firebaseio.com";
     //rama para alumnos
     public static final String CHILD_USERS="Alumnos";
+    public static final String CHILD_PROFE="Profesores";
     public static final String CHILD_GROUPS="Grupos";
     //rama para el chat
     public static final String CHILD_CHAT="Chat";
@@ -16,8 +17,8 @@ public class conexion {
     public static final String KEY_EMAIL="email";
     public static final String NOMBRE="nombre";
     public static final String USER_EMAIL="email"; //CAMBIO*GABRI
-    public static final String ESTADO_ONLINE="Online";
-    public static final String ESTADO_OFFLINE="Offline";
+    public static final String ESTADO_ONLINE="Conectado";
+    public static final String ESTADO_OFFLINE="Desconectado";
     public static final String FECHA="creado";
 
 }

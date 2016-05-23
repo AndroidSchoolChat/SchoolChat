@@ -27,14 +27,20 @@
         <!-- actividad del LogIn -->
         <activity
             android:name=".UserInterface.LogInActivity"
-            android:label="@string/title_LogIn"></activity>
-
-
+            android:label="@string/title_LogIn"
+            android:theme="@style/AppTheme">
+        </activity>
         <!-- actividad del registro -->
         <activity
             android:name=".UserInterface.Altausuario"
-            android:label="@string/title_Altausuario"></activity>
-        <activity android:name=".UserInterface.Chat"></activity>
+            android:label="@string/title_Altausuario"
+            android:theme="@style/AppTheme">
+        </activity>
+        <!-- actividad del chat -->
+        <activity
+            android:name=".UserInterface.Chat"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
