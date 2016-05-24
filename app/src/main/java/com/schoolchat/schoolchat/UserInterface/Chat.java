@@ -59,7 +59,7 @@ public class Chat extends AppCompatActivity {
         adaptadorConversacion=new AdaptadorConversacion(chatvacio);
         recyclerViewChat.setAdapter(adaptadorConversacion);
         FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_CHAT).child(DatosUsuariosMolde.getChatRef());
-
+        setTitle(DatosUsuariosMolde.getnombre());
     }
     @Override
     protected void onResume() {

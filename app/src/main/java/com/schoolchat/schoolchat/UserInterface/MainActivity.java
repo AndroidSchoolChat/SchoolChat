@@ -3,6 +3,7 @@ package com.schoolchat.schoolchat.UserInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -118,6 +119,27 @@ public class MainActivity extends AppCompatActivity {
                         String nombreUsuario=actualusuario.getnombre();
                         String creado=actualusuario.getcreado();
                         AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
+                        //guarda el estado de conexion del usuario
+                        EstadoConexion=ramaUsuarios.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
+                        //listener para cuando cambia el estado de conexion
+                        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                boolean conectado = (Boolean) dataSnapshot.getValue();
+                                if (conectado) {
+                                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
+                                    //si el usuario se desconecta
+                                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
+                                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -152,27 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        //guarda el estado de conexion del usuario
-        EstadoConexion=ramaUsuarios.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
-        //listener para cuando cambia el estado de conexion
-        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean conectado = (Boolean) dataSnapshot.getValue();
-                if (conectado) {
-                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
-                    //si el usuario se desconecta
-                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
-                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
 
 
     }
@@ -199,6 +201,27 @@ public class MainActivity extends AppCompatActivity {
                         String nombreUsuario=actualusuario.getnombre();
                         String creado=actualusuario.getcreado();
                         AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
+                        //guarda el estado de conexion del usuario
+                        EstadoConexion=ramaProfesores.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
+                        //listener para cuando cambia el estado de conexion
+                        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                boolean conectado = (Boolean) dataSnapshot.getValue();
+                                if (conectado) {
+                                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
+                                    //si el usuario se desconecta
+                                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
+                                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(FirebaseError firebaseError) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -234,27 +257,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //guarda el estado de conexion del usuario
-        EstadoConexion=ramaProfesores.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
-        //listener para cuando cambia el estado de conexion
-        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean conectado = (Boolean) dataSnapshot.getValue();
-                if (conectado) {
-                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
-                    //si el usuario se desconecta
-                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
-                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
-                } else {
-                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
-                }
-            }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
 
     }
 

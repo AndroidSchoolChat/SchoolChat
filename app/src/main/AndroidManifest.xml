@@ -39,6 +39,7 @@
         <!-- actividad del chat -->
         <activity
             android:name=".UserInterface.Chat"
+            android:label="chat"
             android:theme="@style/AppTheme">
         </activity>
     </application>
