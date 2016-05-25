@@ -7,7 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.schoolchat.schoolchat.Firebase.conexion;
 import com.schoolchat.schoolchat.R;
@@ -17,31 +19,39 @@ import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 import java.util.List;
 
 
-public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.ViewHolderUsuarios>{
+public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.ViewHolderDifusion>{
     private List<MoldeUsuario> ListaUsuarios;
     private Context scontext;
     private String nombreuser;
     private String fechacreacion;
 
-    public AdaptadorUsuarios(Context context,List<MoldeUsuario> Usuariosfirebase){
+    public AdaptadorDifusion(Context context,List<MoldeUsuario> Usuariosfirebase){
         ListaUsuarios=Usuariosfirebase;
         scontext=context;
     }
 
     @Override
-    public ViewHolderUsuarios onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolderUsuarios(scontext, LayoutInflater.from(parent.getContext()).inflate(R.layout.perfil,parent,false));
+    public ViewHolderDifusion onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolderDifusion(scontext, LayoutInflater.from(parent.getContext()).inflate(R.layout.difusion,parent,false));
     }
     @Override
-    public void onBindViewHolder(ViewHolderUsuarios holder, int position) {
+    public void onBindViewHolder(ViewHolderDifusion holder, int position) {
         MoldeUsuario usuarioseleccionado=ListaUsuarios.get(position);
         //establecer nombre de usuario
         holder.getUserName().setText(usuarioseleccionado.getnombre());
         holder.getEstadoConexion().setText(usuarioseleccionado.getconexion());
         if(usuarioseleccionado.getconexion().equals(conexion.ESTADO_ONLINE)){
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#069E2A"));
+            holder.getEstadoConexion().setTextColor(Color.parseColor("#00FF00"));
         }else{
             holder.getEstadoConexion().setTextColor(Color.parseColor("#FF0000"));
+        }
+        //esto comprueba que usuarios estan seleccionados ¡¡EN DESARROLLO!!
+        if(holder.getSeleccionar().isChecked()){
+            Toast toast1 =
+                    Toast.makeText(scontext,
+                            usuarioseleccionado.getemail(), Toast.LENGTH_SHORT);
+
+            toast1.show();
         }
 
     }
@@ -61,20 +71,17 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
         fechacreacion=fecha;
     }
 
-    public void cambioUsuario(int index,MoldeUsuario usuario){
-        ListaUsuarios.set(index,usuario);
-        notifyDataSetChanged();
-    }
-    public class ViewHolderUsuarios extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolderDifusion extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nombre;
         private TextView estadoConexion;
+        private CheckBox seleccionar;
         private Context contextHolder;
-        public ViewHolderUsuarios(Context context,View itemView){
+        public ViewHolderDifusion(Context context,View itemView){
             super(itemView);
             nombre=(TextView)itemView.findViewById(R.id.nombre);
             estadoConexion=(TextView)itemView.findViewById(R.id.estado);
+            seleccionar=(CheckBox)itemView.findViewById(R.id.seleccion);
             contextHolder=context;
-            itemView.setOnClickListener(this);
         }
         public TextView getUserName(){
             return nombre;
@@ -82,6 +89,7 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
         public TextView getEstadoConexion(){
             return estadoConexion;
         }
+        public CheckBox getSeleccionar(){return seleccionar;}
 
         @Override
         public void onClick(View v) {
@@ -89,9 +97,6 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
             MoldeUsuario usuario=ListaUsuarios.get(posicion);
             usuario.setEnombre(nombreuser);
             usuario.seteCreado(fechacreacion);
-            Intent chat=new Intent(contextHolder,Chat.class);
-            chat.putExtra(conexion.INFO_USER,usuario);
-            contextHolder.startActivity(chat);
         }
     }
 }

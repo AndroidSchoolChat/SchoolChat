@@ -299,6 +299,9 @@ public class MainActivity extends AppCompatActivity {
         if(cambioconexion!=null){
             starFirebase.getRoot().child(".info/connected").removeEventListener(cambioconexion);
         }
+        if(listaProfesores!=null){
+            ramaProfesores.removeEventListener(listaProfesores);
+        }
     }
 
     //Con onPrepareOptionsMenu se elige el archivo xml que se va a usar dependiendo de la condición
@@ -321,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
                 logout();
                 break;
             case R.id.difusion:
+                difusion();
                 break;
         }
 
@@ -335,5 +339,10 @@ public class MainActivity extends AppCompatActivity {
             starFirebase.unauth();
             setAuthenticatedUser(null);
         }
+    }
+    //metodo para lanzar la actividad difusion
+    protected void difusion(){
+        Intent i=new Intent(MainActivity.this,Difusion.class);
+        startActivity(i);
     }
 }
