@@ -31,6 +31,7 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
     public AdaptadorDifusion(Context context,List<MoldeUsuario> Usuariosfirebase){
         ListaUsuarios=Usuariosfirebase;
         scontext=context;
+        DifusionUsuarios.removeAll(DifusionUsuarios);
     }
 
     @Override
