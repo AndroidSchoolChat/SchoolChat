@@ -237,8 +237,8 @@ public class MainActivity extends AppCompatActivity {
                         usuario.setUidreceptor(Uidprofe);
                         usuario.seteEmail(actualUsuarioEmail);
                         usuario.setUidemisor(actualUsuarioUid);
-                        int index = miListaClaveUsuarios.indexOf(Uidprofe);
-                        AdaptadorUsuarios.cambioUsuario(index, usuario);
+
+
                     }
                 }
             }

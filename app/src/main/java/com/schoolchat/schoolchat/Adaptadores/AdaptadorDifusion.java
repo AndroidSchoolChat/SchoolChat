@@ -16,14 +16,17 @@ import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.UserInterface.Chat;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.ViewHolderDifusion>{
+public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.ViewHolderUsuarios>{
     private List<MoldeUsuario> ListaUsuarios;
     private Context scontext;
     private String nombreuser;
     private String fechacreacion;
+    //variable para almacenar los usuarios seleccionados
+    public static final ArrayList<MoldeUsuario> DifusionUsuarios=new ArrayList<MoldeUsuario>();
 
     public AdaptadorDifusion(Context context,List<MoldeUsuario> Usuariosfirebase){
         ListaUsuarios=Usuariosfirebase;
@@ -31,27 +34,19 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
     }
 
     @Override
-    public ViewHolderDifusion onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolderDifusion(scontext, LayoutInflater.from(parent.getContext()).inflate(R.layout.difusion,parent,false));
+    public ViewHolderUsuarios onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new ViewHolderUsuarios(scontext, LayoutInflater.from(parent.getContext()).inflate(R.layout.difusion,parent,false));
     }
     @Override
-    public void onBindViewHolder(ViewHolderDifusion holder, int position) {
+    public void onBindViewHolder(ViewHolderUsuarios holder, int position) {
         MoldeUsuario usuarioseleccionado=ListaUsuarios.get(position);
         //establecer nombre de usuario
         holder.getUserName().setText(usuarioseleccionado.getnombre());
         holder.getEstadoConexion().setText(usuarioseleccionado.getconexion());
         if(usuarioseleccionado.getconexion().equals(conexion.ESTADO_ONLINE)){
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#00FF00"));
+            holder.getEstadoConexion().setTextColor(Color.parseColor("#069E2A"));
         }else{
             holder.getEstadoConexion().setTextColor(Color.parseColor("#FF0000"));
-        }
-        //esto comprueba que usuarios estan seleccionados ¡¡EN DESARROLLO!!
-        if(holder.getSeleccionar().isChecked()){
-            Toast toast1 =
-                    Toast.makeText(scontext,
-                            usuarioseleccionado.getemail(), Toast.LENGTH_SHORT);
-
-            toast1.show();
         }
 
     }
@@ -71,17 +66,17 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
         fechacreacion=fecha;
     }
 
-    public class ViewHolderDifusion extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+    public class ViewHolderUsuarios extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nombre;
         private TextView estadoConexion;
-        private CheckBox seleccionar;
         private Context contextHolder;
-        public ViewHolderDifusion(Context context,View itemView){
+        public ViewHolderUsuarios(Context context,View itemView){
             super(itemView);
             nombre=(TextView)itemView.findViewById(R.id.nombre);
             estadoConexion=(TextView)itemView.findViewById(R.id.estado);
-            seleccionar=(CheckBox)itemView.findViewById(R.id.seleccion);
             contextHolder=context;
+            itemView.setOnClickListener(this);
         }
         public TextView getUserName(){
             return nombre;
@@ -89,14 +84,23 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
         public TextView getEstadoConexion(){
             return estadoConexion;
         }
-        public CheckBox getSeleccionar(){return seleccionar;}
-
+        //este evento se encargara de almacenar los usuarios y mostrar a traves de su checkbox si han sido seleccionados o no
         @Override
         public void onClick(View v) {
             int posicion=getLayoutPosition();//obtine la posicion de la fila seleccionada
             MoldeUsuario usuario=ListaUsuarios.get(posicion);
             usuario.setEnombre(nombreuser);
             usuario.seteCreado(fechacreacion);
+            CheckBox chb=(CheckBox)v.findViewById(R.id.elegir);
+            //si el usuario seleccionado no ha sido seleccionado antes se introduce y su chexbox se pone en true
+            if(!DifusionUsuarios.contains(usuario)) {
+                DifusionUsuarios.add(usuario);
+                chb.setChecked(true);
+            }else{
+                //para deseleccionar un usuario se pulsa de nuevo sobre él para no volver ha introducirlo como ya esta se borra y su checkbox a false
+                DifusionUsuarios.remove(usuario);
+                chb.setChecked(false);
+            }
         }
     }
 }
