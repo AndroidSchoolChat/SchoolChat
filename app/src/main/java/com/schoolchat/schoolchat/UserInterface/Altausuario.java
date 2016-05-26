@@ -121,7 +121,7 @@ public class Altausuario extends AppCompatActivity {
 
             //Comprobacion que en los campos se haya introducido datos:
             if (useremailProf.isEmpty() || userNameProf.isEmpty() || userpasswordProf.isEmpty()) {
-                MostrarError("Asegurese de que todos los campos esten rellenos");
+                MostrarError("Asegurese de que todos los campos esten rellenos.");
 
             } else {
 
@@ -224,7 +224,7 @@ public class Altausuario extends AppCompatActivity {
             String userNameAlum = ed_NomUsu.getText().toString();
             String userpasswordAlum = ed_Cont.getText().toString();
             if (useremailAlum.isEmpty() || userNameAlum.isEmpty() || userpasswordAlum.isEmpty()) {
-                MostrarError("Asegurese de que todos los campos esten rellenos");
+                MostrarError("Asegurese de que todos los campos esten rellenos.");
             } else {
                 final Firebase registroUsuario = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
                 final String finalUserEmail = useremailAlum;
@@ -241,7 +241,7 @@ public class Altausuario extends AppCompatActivity {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                         Snackbar.make(rootView, "Se ha registrado un nuevo alumno", Snackbar.LENGTH_SHORT).show();
+                         Snackbar.make(rootView, "Se ha registrado un nuevo alumno.", Snackbar.LENGTH_SHORT).show();
 
                         registroUsuario.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
 
