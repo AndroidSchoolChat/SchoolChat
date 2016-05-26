@@ -11,6 +11,7 @@
     <string name="password">password</string>
 
 
+
     <!--textos para la actividad alatausuario-->
     <string name="title_Altausuario">Nuevo Usuario</string>
     <string name="textDefCorreo">Correo electronico</string>
@@ -22,5 +23,14 @@
     <string name="CorrectoProf">Profesor nuevo creado.</string>
 
     <string name="errorVerif">La contraseña de verificacion no es correcta. Vuelva a intentarlo.</string>
-    <string name="title_activity_difusion">Difusion</string>
+
+
+    <string-array name="Curso">
+        <item>1ºDAM</item>
+        <item>2ºDAM</item>
+        <item>1ºASIR</item>
+        <item>2ºASIR</item>
+    </string-array>
+
+
 </resources>

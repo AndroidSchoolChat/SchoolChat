@@ -16,9 +16,10 @@ public class conexion {
     //deben empezar en minusculas y en el molde han de tener el mismo nombre y sin espacios en blanco
     public static final String KEY_EMAIL="email";
     public static final String NOMBRE="nombre";
-    public static final String USER_EMAIL="email"; //CAMBIO*GABRI
+    public static final String USER_EMAIL="email";
     public static final String ESTADO_ONLINE="Conectado";
     public static final String ESTADO_OFFLINE="Desconectado";
     public static final String FECHA="creado";
+    public static final String CURSO="curso";
 
 }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
+
+
 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -47,37 +53,64 @@
                     android:layout_alignLeft="@+id/ed_NombreUsuario"
                     android:layout_alignStart="@+id/ed_NombreUsuario" />
 
-    <EditText
+    <RadioGroup
+        android:id="@+id/rg_tipo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/ed_Contraseña"
+        android:layout_alignStart="@+id/ed_Contraseña"
+        android:layout_below="@+id/ed_Contraseña">
+
+        <RadioButton
+            android:onClick="onCurso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alumno"
+            android:checked="true"
+            android:id="@+id/rb_Alumno"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/ed_Contraseña"
+            android:layout_alignLeft="@+id/ed_Contraseña"
+            android:layout_alignStart="@+id/ed_Contraseña"
+            android:layout_marginTop="10dp" />
+
+        <RadioButton
+            android:onClick="onCurso"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profesor"
+            android:id="@+id/rb_Profesor"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/ed_Contraseña"
+            android:layout_alignEnd="@+id/ed_Contraseña"
+            android:layout_marginTop="30dp" />
+
+    </RadioGroup>
+
+
+    <Spinner
+        android:id="@+id/sp_Curso"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ed_ContraseñaVerif"
+        android:layout_alignLeft="@+id/bt_Cancelar"
+        android:layout_alignStart="@+id/bt_Cancelar"
+        android:layout_marginBottom="35dp"/>
+
+
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:inputType="textPassword"
         android:id="@+id/ed_ContraseñaVerif"
         android:hint="@string/textContrVerif"
         android:visibility="invisible"
-        android:layout_below="@+id/cb_Profesor"
-        android:layout_alignLeft="@+id/tv_pregunta"
-        android:layout_alignStart="@+id/tv_pregunta" />
-       " />
+        android:layout_alignLeft="@+id/rg_tipo"
+        android:layout_alignStart="@+id/rg_tipo"
+        android:layout_below="@+id/rg_tipo" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="¿Eres profesor?"
-        android:id="@+id/tv_pregunta"
-        android:layout_below="@+id/ed_Contraseña"
-        android:layout_alignLeft="@+id/ed_Contraseña"
-        android:layout_alignStart="@+id/ed_Contraseña"
-        android:layout_marginTop="25dp" />
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cb_Profesor"
-        android:onClick="onProfesor"
-        android:layout_alignTop="@+id/tv_pregunta"
-        android:layout_alignRight="@+id/ed_Contraseña"
-        android:layout_alignEnd="@+id/ed_Contraseña" />
 
     <Button
         android:layout_width="wrap_content"
@@ -95,13 +128,15 @@
         android:text="@string/botonCancelar"
         android:id="@+id/bt_Cancelar"
         android:onClick="onCancelar"
-        android:layout_below="@+id/ed_ContraseñaVerif"
-        android:layout_alignRight="@+id/cb_Profesor"
-        android:layout_alignEnd="@+id/cb_Profesor" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/ed_NombreUsuario"
+        android:layout_alignEnd="@+id/ed_NombreUsuario" />
+
 
 
 </RelativeLayout>
 
+</ScrollView>
 
 
 

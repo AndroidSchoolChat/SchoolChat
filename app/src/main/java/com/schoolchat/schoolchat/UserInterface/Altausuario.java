@@ -3,12 +3,17 @@ package com.schoolchat.schoolchat.UserInterface;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+
 import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -32,7 +37,12 @@ public class Altausuario extends AppCompatActivity {
 
 
     private EditText ed_ContVerif;
-    private CheckBox cb_Profesor;
+
+    private RadioButton rb_alum;
+    private RadioButton rb_prof;
+
+
+    private Spinner curso;
 
     public String verif;
     View rootView;
@@ -53,23 +63,43 @@ public class Altausuario extends AppCompatActivity {
         ed_NomUsu = (EditText) findViewById(R.id.ed_NombreUsuario);
         ed_Cont = (EditText) findViewById(R.id.ed_Contraseña);
 
+        rb_alum = (RadioButton) findViewById(R.id.rb_Alumno);
+        rb_prof = (RadioButton) findViewById(R.id.rb_Profesor);
 
+
+        curso = (Spinner) findViewById(R.id.sp_Curso);
         //Verificacion si es profesor:
         ed_ContVerif = (EditText) findViewById(R.id.ed_ContraseñaVerif);
-        cb_Profesor = (CheckBox) findViewById(R.id.cb_Profesor);
 
+        //Creamos el arrayAdapter para añadir los valores del array al spinner:
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.Curso, android.R.layout.simple_spinner_item);
+
+        //Especificar el tipo de Spinner y su layout:
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        curso.setAdapter(adapter);
 
     }
 
+    //Seleccion de radioButton que determinara si sera visible la lista de cursos o la contraseña de verificacion.
+   public void onCurso(View view){
+       boolean checked = ((RadioButton) view).isChecked();
+        switch(view.getId()) {
+            case R.id.rb_Alumno:
+                if (checked)
+                curso.setVisibility(View.VISIBLE);
+                ed_ContVerif.setVisibility(View.INVISIBLE);
 
-    //Muestra el campo de la contraseña de verificacion si el checkbox esta seleccionado
-    public void onProfesor(View v) {
-        if (cb_Profesor.isChecked()) {
-            ed_ContVerif.setVisibility(View.VISIBLE);
-        } else {
-            ed_ContVerif.setVisibility(View.INVISIBLE);
+                    break;
+            case R.id.rb_Profesor:
+                if (checked)
+                    ed_ContVerif.setVisibility(View.VISIBLE);
+                    curso.setVisibility(View.INVISIBLE);
+                    break;
         }
     }
+
+
 
 
 
@@ -82,7 +112,7 @@ public class Altausuario extends AppCompatActivity {
 
         //**--Codigo para el registro del PROFESOR:--*
 
-        if (cb_Profesor.isChecked()) {
+        if (rb_prof.isChecked()) {
 
             //variables para registro de profesor pasadas a string
             final String useremailProf = ed_Em.getText().toString();
@@ -121,11 +151,6 @@ public class Altausuario extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                                 /*   AlertDialog.Builder errorVerif= new AlertDialog.Builder(Altausuario.this);
-                                    errorVerif.setMessage(R.string.CorrectoProf);
-                                    errorVerif.setPositiveButton(android.R.string.ok,null);
-                                    errorVerif.show();
-*/
                                     Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_SHORT).show();
 
                                     registroProfesor.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
@@ -138,8 +163,9 @@ public class Altausuario extends AppCompatActivity {
                                             map.put(conexion.CHILD_CONNECT, conexion.ESTADO_OFFLINE);
 
 
-                                            Date fecha = new Date(); //CAMBIADO*GABRI
+                                            Date fecha = new Date();
                                             map.put(conexion.FECHA, fecha);
+
 
 
                                             registroProfesor.child(conexion.CHILD_PROFE).child(authData.getUid()).setValue(map); //Añade los datos a Firebase en la pestaña de PROFESOR
@@ -205,6 +231,9 @@ public class Altausuario extends AppCompatActivity {
                 final String finalUserPassword = userpasswordAlum;
                 final String finalUserName = userNameAlum;
 
+                //Obtiene la opcion elegida del spinner:
+                final String cursoTexto=curso.getSelectedItem().toString();
+
                 //crear el usuario
                 registroUsuario.createUser(useremailAlum, userpasswordAlum, new Firebase.ValueResultHandler<Map<String, Object>>() {
 
@@ -222,13 +251,14 @@ public class Altausuario extends AppCompatActivity {
                                 map.put(conexion.NOMBRE, finalUserName);
                                 map.put(conexion.USER_EMAIL, finalUserEmail);
                                 map.put(conexion.CHILD_CONNECT, conexion.ESTADO_OFFLINE);
+                                map.put(conexion.CURSO,cursoTexto);
 
 
-                                Date fecha = new Date(); //CAMBIADO*GABRI
+                                Date fecha = new Date();
                                 map.put(conexion.FECHA, fecha);
 
 
-                                //comento esto de momento registroUsuario.child("Alumnos:").child(authData.getUid()).setValue(map); //Añade datos en la pestaña de ALUMNO.
+
                                 registroUsuario.child(conexion.CHILD_USERS).child(authData.getUid()).setValue(map); //Añade datos en la pestaña de usuarios.
 
 
