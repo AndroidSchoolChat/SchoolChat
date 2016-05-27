@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent">
 <!--contenedor para los elemntos del login que se fija en vertical-->
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,26 +22,64 @@
         android:layout_height="wrap_content"
         android:id="@+id/userEmail"
         android:inputType="textEmailAddress"
-        android:hint="@string/email" />
+        android:hint="@string/email"
+        style="@style/EditText"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp" />
     <!--edittext para la contraseña-->
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/password"
         android:inputType="textPassword"
-        android:hint="@string/password" />
+        android:hint="@string/password"
+        style="@style/EditText"
+        android:layout_below="@+id/userEmail"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="41dp" />
     <!--boton para entrar en la aplicacion-->
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
         android:id="@+id/login"
-        android:onClick="onLogin" />
+        android:onClick="onLogin"
+        android:layout_marginTop="33dp"
+        android:layout_below="@+id/password"
+        android:layout_alignLeft="@+id/registrar"
+        android:layout_alignStart="@+id/registrar"
+        android:layout_alignRight="@+id/registrar"
+        android:layout_alignEnd="@+id/registrar" />
     <!--boton para el registro de un nuevo usuario-->
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/registro"
         android:id="@+id/registrar"
-        android:onClick="onRegistrar" />
-</LinearLayout>
+        android:onClick="onRegistrar"
+        android:layout_below="@+id/login"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_launchernew"
+        android:layout_alignBottom="@+id/imageView2"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="350px"
+        android:id="@+id/imageView2"
+        android:src="@drawable/logotipo"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="50dp" />
+
+</RelativeLayout>
+</ScrollView>

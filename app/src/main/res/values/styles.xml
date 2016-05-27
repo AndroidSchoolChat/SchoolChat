@@ -3,22 +3,29 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/bgschoolchat</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:editTextStyle">@style/EditText</item>
+        <item name="android:buttonStyle">@style/Boton</item>
+        <item name="android:button">@style/botonRedondo</item>
+        <item name="android:checked">@style/CheckBoxIndigo</item>
     </style>
 
-    <style name="Separator">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">1dp</item>
-        <item name="android:background">@android:color/holo_blue_bright</item>
-        <item name="android:layout_marginBottom">@dimen/activity_vertical_margin</item>
-    </style>
-
-    <style name="EditTextStyle" parent="@android:style/Widget.Holo.Light.EditText">
+    <style name="EditText" parent="Widget.AppCompat.EditText">
         <item name="android:background">@drawable/rectangle</item>
         <item name="android:padding">10dp</item>
+    </style>
+    <style name="Boton"  parent="Widget.AppCompat.Button.Colored">
+        <item name="android:color">@color/colorAccent</item>
+    </style>
+    <style name="CheckBoxIndigo">
+        <item name="android:color">@color/colorAccent</item>
+    </style>
+    <style name="botonRedondo" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/oval</item>
+        <item name="android:padding">5dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

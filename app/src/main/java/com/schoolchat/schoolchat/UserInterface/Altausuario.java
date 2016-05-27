@@ -151,7 +151,7 @@ public class Altausuario extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                                    Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_LONG).show();
 
                                     registroProfesor.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
 
@@ -241,7 +241,7 @@ public class Altausuario extends AppCompatActivity {
                     @Override
                     public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                         Snackbar.make(rootView, "Se ha registrado un nuevo alumno.", Snackbar.LENGTH_SHORT).show();
+                         Snackbar.make(rootView, "Se ha registrado un nuevo alumno.", Snackbar.LENGTH_LONG).show();
 
                         registroUsuario.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
 

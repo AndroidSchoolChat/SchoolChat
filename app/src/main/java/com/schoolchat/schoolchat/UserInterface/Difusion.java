@@ -239,7 +239,9 @@ public class Difusion extends AppCompatActivity {
                 FirebaseChat.push().setValue(nuevomensaje);
                 mensajeTV.setText("");
             }
+            Snackbar.make(rootView,"Mensaje enviado correctamente",Snackbar.LENGTH_LONG).show();
+        }else {
+            Snackbar.make(rootView, "Escribe para poder enviar el mensaje", Snackbar.LENGTH_LONG).show();
         }
-
     }
 }

@@ -8,7 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.schoolchat.schoolchat.UserInterface.Difusion"
-    android:background="#530bfb03"
     android:id="@+id/root">
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
@@ -18,36 +17,38 @@
         android:id="@+id/Enviar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#adfbaa"
-        android:layout_alignParentBottom="true"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:paddingTop="8dp">
+        android:paddingTop="8dp"
+        android:layout_marginBottom="27dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <EditText
             android:id="@+id/textoenviar"
-            android:layout_marginLeft="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="#555555"
             android:textSize="14sp"
             android:hint="escribe tu mensaje"
+            style="@style/EditText"
             android:gravity="top"
-            android:layout_toStartOf="@+id/Enviarmensaje"
-            android:layout_toLeftOf="@+id/Enviarmensaje" />
-        <Button
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/Enviarmensaje"
+            android:layout_toStartOf="@+id/Enviarmensaje" />
+        <ImageButton
             android:id="@+id/Enviarmensaje"
-            android:layout_marginRight="10dp"
-            android:textColor="#FFFFFF"
-            android:layout_width="72dp"
-            android:layout_height="40dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:text="enviar"
-            android:background="#458bff"
             android:onClick="botonenviar"
-            android:layout_alignParentEnd="true"
+            android:src="@android:drawable/ic_menu_send"
+            style="@style/botonRedondo"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            />
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
 </RelativeLayout>

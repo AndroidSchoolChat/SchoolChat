@@ -130,9 +130,9 @@ public class MainActivity extends AppCompatActivity {
                                     EstadoConexion.setValue(conexion.ESTADO_ONLINE);
                                     //si el usuario se desconecta
                                     EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
-                                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_LONG).show();
                                 } else {
-                                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
+                                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_LONG).show();
                                 }
                             }
 

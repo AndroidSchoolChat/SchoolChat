@@ -8,7 +8,7 @@
         android:orderInCategory="100"
         app:showAsAction="never"/>
     <item android:id="@+id/difusion"
-        android:title="Crear Grupo"
+        android:title="Mensaje de difusión"
         android:orderInCategory="100"
         app:showAsAction="never"/>
 </menu>

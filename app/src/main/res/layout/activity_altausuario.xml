@@ -28,6 +28,7 @@
                     android:ems="10"
                     android:id="@+id/ed_Email"
                     android:hint="Correo"
+                    style="@style/EditText"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
                     />
@@ -38,6 +39,7 @@
                     android:ems="10"
                     android:id="@+id/ed_NombreUsuario"
                     android:hint="@string/textDefNomUsu"
+                    style="@style/EditText"
                     android:layout_below="@+id/ed_Email"
                     android:layout_alignLeft="@+id/ed_Email"
                     android:layout_alignStart="@+id/ed_Email" />
@@ -49,6 +51,7 @@
                     android:ems="10"
                     android:id="@+id/ed_Contraseña"
                     android:hint="@string/textDefContr"
+                    style="@style/EditText"
                     android:layout_below="@+id/ed_NombreUsuario"
                     android:layout_alignLeft="@+id/ed_NombreUsuario"
                     android:layout_alignStart="@+id/ed_NombreUsuario" />
@@ -106,6 +109,7 @@
         android:inputType="textPassword"
         android:id="@+id/ed_ContraseñaVerif"
         android:hint="@string/textContrVerif"
+        style="@style/EditText"
         android:visibility="invisible"
         android:layout_alignLeft="@+id/rg_tipo"
         android:layout_alignStart="@+id/rg_tipo"

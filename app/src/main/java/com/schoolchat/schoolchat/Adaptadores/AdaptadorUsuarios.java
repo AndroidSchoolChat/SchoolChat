@@ -3,6 +3,7 @@ package com.schoolchat.schoolchat.Adaptadores;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +40,9 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
         holder.getUserName().setText(usuarioseleccionado.getnombre());
         holder.getEstadoConexion().setText(usuarioseleccionado.getconexion());
         if(usuarioseleccionado.getconexion().equals(conexion.ESTADO_ONLINE)){
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#069E2A"));
+            holder.getEstadoConexion().setTextColor(ContextCompat.getColor(scontext,R.color.conectado));
         }else{
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#FF0000"));
+            holder.getEstadoConexion().setTextColor(ContextCompat.getColor(scontext,R.color.desconectado));
         }
 
     }

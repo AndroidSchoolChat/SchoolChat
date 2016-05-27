@@ -12,57 +12,29 @@
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/divider"
-        />
+        android:layout_above="@+id/Enviar" />
 <!--este view sirce para dividir la pantlla-->
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_gravity="bottom"
-        android:background="#b6b6b6"
-        android:layout_above="@+id/Enviar"/>
-    <RelativeLayout
-        android:id="@+id/Enviar"
+    <EditText
+        android:id="@+id/textoenviar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
+        android:textColor="#555555"
+        android:textSize="14sp"
+        android:hint="escribe tu mensaje"
+        style="@style/EditText"
+        android:gravity="top"
         android:layout_alignParentBottom="true"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="8dp">
-
-        <EditText
-            android:id="@+id/textoenviar"
-            android:layout_marginLeft="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="#555555"
-            android:textSize="14sp"
-            android:hint="escribe tu mensaje"
-            android:gravity="top"
-            android:layout_toStartOf="@+id/Enviarmensaje"
-            android:layout_toLeftOf="@+id/Enviarmensaje" />
-        <Button
-            android:id="@+id/Enviarmensaje"
-            android:layout_marginRight="10dp"
-            android:textColor="#FFFFFF"
-            android:layout_width="72dp"
-            android:layout_height="40dp"
-            android:text="enviar"
-            android:background="#458bff"
-            android:onClick="botonenviar"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            />
-    </RelativeLayout>
-
-    <ProgressBar
-        android:id="@+id/circlestadby"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:visibility="gone"/>
+        android:layout_toLeftOf="@+id/Enviarmensaje"
+        android:layout_toStartOf="@+id/Enviarmensaje" />
+    <ImageButton
+        android:id="@+id/Enviarmensaje"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:text="enviar"
+        android:onClick="botonenviar"
+        android:src="@android:drawable/ic_menu_send"
+        style="@style/botonRedondo"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>
