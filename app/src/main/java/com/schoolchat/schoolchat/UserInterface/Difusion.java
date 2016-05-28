@@ -223,9 +223,10 @@ public class Difusion extends AppCompatActivity {
     public void botonenviar(View view){
         String enviarmensaje=mensajeTV.getText().toString();
         enviarmensaje=enviarmensaje.trim();
-        if(!enviarmensaje.isEmpty()){
+        ArrayList<MoldeUsuario> difusionUsuarios = AdaptadorDifusion.DifusionUsuarios;
+        if(!enviarmensaje.isEmpty() && difusionUsuarios.size()>0){
             //llamamos a la variable que contiene los usuarios seleccionados y le asignamos una local
-            ArrayList<MoldeUsuario> difusionUsuarios = AdaptadorDifusion.DifusionUsuarios;
+
             for(int i=0;i<difusionUsuarios.size();i++){
                 //recorremos los usuarios uno a uno
                 MoldeUsuario usuario=difusionUsuarios.get(i);
@@ -241,7 +242,13 @@ public class Difusion extends AppCompatActivity {
             }
             Snackbar.make(rootView,"Mensaje enviado correctamente",Snackbar.LENGTH_LONG).show();
         }else {
-            Snackbar.make(rootView, "Escribe para poder enviar el mensaje", Snackbar.LENGTH_LONG).show();
+            if(enviarmensaje.isEmpty()){
+                Snackbar.make(rootView, "Escribe para poder enviar el mensaje", Snackbar.LENGTH_LONG).show();
+            }else {
+                if (difusionUsuarios.size() == 0) {
+                    Snackbar.make(rootView, "Selecciona alumnos para hacer la difusion", Snackbar.LENGTH_LONG).show();
+                }
+            }
         }
     }
 }
