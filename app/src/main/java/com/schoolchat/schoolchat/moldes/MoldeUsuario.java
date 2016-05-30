@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class MoldeUsuario implements Parcelable{
     //informacion del receptor
     private String nombre;
+    private String curso;
     private String email;
     private String creado;
     private String conexion;
@@ -25,6 +26,7 @@ public class MoldeUsuario implements Parcelable{
 
     private MoldeUsuario(Parcel in) {
         nombre = in.readString();
+        curso =in.readString();
         email = in.readString();
         creado=in.readString();
         conexion = in.readString();
@@ -36,6 +38,7 @@ public class MoldeUsuario implements Parcelable{
     }
     //informacion del receptor
     public String getnombre(){return nombre;}
+    public String getcurso(){return curso;}
     public String getemail(){return email;}
     public String getcreado(){return creado;}
     public String getconexion(){return conexion;}
@@ -71,6 +74,7 @@ public class MoldeUsuario implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(nombre);
+        dest.writeString(curso);
         dest.writeString(email);
         dest.writeString(creado);
         dest.writeString(conexion);

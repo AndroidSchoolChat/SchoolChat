@@ -10,7 +10,8 @@
         <item name="android:editTextStyle">@style/EditText</item>
         <item name="android:buttonStyle">@style/Boton</item>
         <item name="android:button">@style/botonRedondo</item>
-        <item name="android:checked">@style/CheckBoxIndigo</item>
+
+
     </style>
 
     <style name="EditText" parent="Widget.AppCompat.EditText">
@@ -20,9 +21,8 @@
     <style name="Boton"  parent="Widget.AppCompat.Button.Colored">
         <item name="android:color">@color/colorAccent</item>
     </style>
-    <style name="CheckBoxIndigo">
-        <item name="android:color">@color/colorAccent</item>
-    </style>
+
+
     <style name="botonRedondo" parent="Widget.AppCompat.Button.Colored">
         <item name="android:background">@drawable/oval</item>
         <item name="android:padding">5dp</item>

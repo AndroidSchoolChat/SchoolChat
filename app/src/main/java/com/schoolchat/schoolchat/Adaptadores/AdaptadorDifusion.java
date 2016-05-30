@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,11 +44,11 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
         MoldeUsuario usuarioseleccionado=ListaUsuarios.get(position);
         //establecer nombre de usuario
         holder.getUserName().setText(usuarioseleccionado.getnombre());
-        holder.getEstadoConexion().setText(usuarioseleccionado.getconexion());
+        holder.getCurso().setText(usuarioseleccionado.getcurso());
         if(usuarioseleccionado.getconexion().equals(conexion.ESTADO_ONLINE)){
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#069E2A"));
+            holder.getImagenConexion().setImageResource(R.drawable.circle_green);
         }else{
-            holder.getEstadoConexion().setTextColor(Color.parseColor("#FF0000"));
+            holder.getImagenConexion().setImageResource(R.drawable.circle_red);
         }
 
     }
@@ -70,21 +71,22 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
 
     public class ViewHolderUsuarios extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView nombre;
-        private TextView estadoConexion;
+        private TextView curso;
+        private ImageView imagenConexion;
         private Context contextHolder;
         public ViewHolderUsuarios(Context context,View itemView){
             super(itemView);
             nombre=(TextView)itemView.findViewById(R.id.nombre);
-            estadoConexion=(TextView)itemView.findViewById(R.id.estado);
+            curso=(TextView)itemView.findViewById(R.id.curso);
+            imagenConexion=(ImageView)itemView.findViewById(R.id.imagenEstado);
             contextHolder=context;
             itemView.setOnClickListener(this);
         }
         public TextView getUserName(){
             return nombre;
         }
-        public TextView getEstadoConexion(){
-            return estadoConexion;
-        }
+        public TextView getCurso(){return curso;}
+        public ImageView getImagenConexion(){return imagenConexion;}
         //este evento se encargara de almacenar los usuarios y mostrar a traves de su checkbox si han sido seleccionados o no
         @Override
         public void onClick(View v) {

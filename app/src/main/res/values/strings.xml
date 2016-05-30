@@ -4,7 +4,7 @@
 
 
     <!--textos para loginactivity-->
-    <string name="title_LogIn">LogIn</string>
+    <string name="title_LogIn">Incio de sesión</string>
     <string name="login">Entrar</string>
     <string name="registro">Registrar</string>
     <string name="email">email</string>
@@ -32,5 +32,7 @@
         <item>2ºASIR</item>
     </string-array>
 
+    <!--textos para difusión-->
+    <string name="title_difusion">Mensaje de difusión</string>
 
 </resources>
