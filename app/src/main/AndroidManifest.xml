@@ -34,9 +34,11 @@
             android:name=".UserInterface.Chat"
             android:label="chat"
             android:theme="@style/AppTheme" />
-        <activity android:name=".UserInterface.Difusion"
+        <activity
+            android:name=".UserInterface.Difusion"
             android:label="@string/title_difusion"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".UserInterface.Grupo"></activity>
     </application>
 
 </manifest>

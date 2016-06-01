@@ -76,10 +76,8 @@
         android:layout_height="350px"
         android:id="@+id/imageView2"
         android:src="@drawable/logotipo"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="50dp" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
 </ScrollView>

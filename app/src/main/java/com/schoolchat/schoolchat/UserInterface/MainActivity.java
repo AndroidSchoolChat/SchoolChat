@@ -24,7 +24,9 @@ import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 //clase para la vista de los usuarios / grupos de la aplicacion
@@ -38,14 +40,17 @@ public class MainActivity extends AppCompatActivity {
     private String actualUsuarioEmail;
     private Firebase ramaUsuarios;
     private Firebase ramaProfesores;
+    private Firebase ramaGrupo;
     private ChildEventListener listaUsuarios;
     private ChildEventListener listaProfesores;
+    private ChildEventListener listaGrupos;
     private ArrayList<String> miListaClaveUsuarios;
     private Firebase EstadoConexion;
     private Firebase estadoConexionProfe, estadoConexionUser;
     private ValueEventListener cambioconexion;
     private View rootView;
     public boolean profesor= false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         //rama usuarios
         ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_USERS);
         ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_PROFE);
+        ramaGrupo=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_GROUPS);
         //refencia al recyclerview
         listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
         //inicializar adaptador
@@ -89,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             actualUsuarioEmail=(String)authData.getProviderData().get(conexion.KEY_EMAIL);
             consultaUsuariosFirebase();
             consultaProfesorFirebase();
-
+            consultaGruposfirebase();
         }else{
             irLogin();
         }
@@ -262,7 +268,64 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    //parte para los grupos
+    private void consultaGruposfirebase(){
+        listaGrupos=ramaGrupo.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                if(dataSnapshot.exists()){
+                    //cogemos el uid del grupo nombregrupo-uidprofecerador
+                    String UidGrupo=dataSnapshot.getKey();
+                    //buscamos donde esta el guion que une el nombre y el profe
+                    int guion=UidGrupo.indexOf('-');
+                    //obtenemos el nombre del grupo que esta dentro de Uid grupo
+                    String nombreGrupo=UidGrupo.substring(0,guion);
 
+                    if(dataSnapshot.child(actualUsuarioUid).exists()) {
+                        //creamos lo que va a ser un grupo
+                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
+                        //se añade toda la informacion necesaria para acceder al chat puesto que no esta guardada en firebase
+                        //añadir uid del receptor
+                        usuario.setUidreceptor(UidGrupo);
+                        //añadir informacion del actual usuario emisor
+                        usuario.seteEmail(UidGrupo);
+                        usuario.setUidemisor(actualUsuarioUid);
+                        //esto es necesario para que no se rompa la aplicacion
+                        usuario.setConexion("desconectado");
+                        usuario.setNombre(nombreGrupo);
+                        //este campo esta vacia para tener una sola referencia en la rama chat y se pueda acceder a ella con distintos usuarios
+                        usuario.setEmail("");
+                        //el valor de esta variables da un poco igual pero son necesaria para que funcione la actividad del chat
+                        usuario.setCreado("0");
+                        usuario.seteCreado("1");
+                        miListaClaveUsuarios.add(UidGrupo);
+                        AdaptadorUsuarios.refill(usuario);
+
+                    }
+                }
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
 
     //metodo para ir al login
     protected void irLogin(){
@@ -326,6 +389,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.difusion:
                 difusion();
                 break;
+            case R.id.grupo:
+                crearGrupo();
+                break;
         }
 
         return super.onOptionsItemSelected(item);
@@ -343,6 +409,10 @@ public class MainActivity extends AppCompatActivity {
     //metodo para lanzar la actividad difusion
     protected void difusion(){
         Intent i=new Intent(MainActivity.this,Difusion.class);
+        startActivity(i);
+    }
+    protected void crearGrupo(){
+        Intent i=new Intent(MainActivity.this,Grupo.class);
         startActivity(i);
     }
 }

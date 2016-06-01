@@ -38,6 +38,8 @@ public class Chat extends AppCompatActivity {
     private Firebase FirebaseChat;
     //Listener para
     private ChildEventListener FirebaseChatListener;
+    private String nombreEmisor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +51,7 @@ public class Chat extends AppCompatActivity {
         Uidreceptor=DatosUsuariosMolde.getUidreceptor();
         //set uid emisor
         Uidemisor=DatosUsuariosMolde.getUidemisor();
+        nombreEmisor=DatosUsuariosMolde.getEnombre();
         //establecer adaptador para chat
         recyclerViewChat=(RecyclerView)findViewById(R.id.chat_recycler_view);
         //asignar el edittext a un textview
@@ -128,6 +131,7 @@ public class Chat extends AppCompatActivity {
     public void botonenviar(View view){
         String enviarmensaje=mensajeTV.getText().toString();
         enviarmensaje=enviarmensaje.trim();
+        enviarmensaje=nombreEmisor+':'+enviarmensaje;
         if(!enviarmensaje.isEmpty()){
             Map<String,String> nuevomensaje=new HashMap<>();
             nuevomensaje.put("emisor",Uidemisor);

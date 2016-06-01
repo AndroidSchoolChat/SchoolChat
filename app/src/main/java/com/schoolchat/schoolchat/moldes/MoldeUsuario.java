@@ -42,6 +42,10 @@ public class MoldeUsuario implements Parcelable{
     public String getemail(){return email;}
     public String getcreado(){return creado;}
     public String getconexion(){return conexion;}
+    public void setConexion(String conexion){this.conexion=conexion;}
+    public void setNombre(String nombre){this.nombre=nombre;}
+    public void setEmail(String Email){this.email=Email;}
+    public void setCreado(String creado){this.creado=creado;}
     public String getUidreceptor(){return Uidreceptor;}
     public void setUidreceptor(String Uidreceptor){this.Uidreceptor=Uidreceptor;}
     //informacion del emisor

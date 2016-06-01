@@ -14,10 +14,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
 import com.schoolchat.schoolchat.Adaptadores.AdaptadorDifusion;
-import com.schoolchat.schoolchat.Adaptadores.AdaptadorUsuarios;
 import com.schoolchat.schoolchat.Firebase.conexion;
 import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
@@ -27,8 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Difusion extends AppCompatActivity {
-
+public class Grupo extends AppCompatActivity {
     private View rootView;
     private Firebase starFirebase;
     private Firebase ramaUsuarios;
@@ -44,11 +40,10 @@ public class Difusion extends AppCompatActivity {
     private Firebase ramaProfesores;
     private ChildEventListener listaProfesores;
     private Firebase FirebaseChat;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_difusion);//para poder usar snackBar
+        setContentView(R.layout.activity_grupo);
         rootView=findViewById(R.id.root);
         mensajeTV=(TextView)findViewById(R.id.textoenviar);
         //Iniciamos Firebase
@@ -221,31 +216,32 @@ public class Difusion extends AppCompatActivity {
         }
     }
     public void botonenviar(View view){
-        String enviarmensaje=mensajeTV.getText().toString();
-        enviarmensaje=enviarmensaje.trim();
+        String nombregrupo=mensajeTV.getText().toString();
+        nombregrupo=nombregrupo.trim();
         //llamamos a la variable que contiene los usuarios seleccionados y le asignamos una local
-        ArrayList<MoldeUsuario> difusionUsuarios = AdaptadorDifusion.DifusionUsuarios;
-        if(!enviarmensaje.isEmpty() && difusionUsuarios.size()>0){
-            for(int i=0;i<difusionUsuarios.size();i++){
+        ArrayList<MoldeUsuario> grupoUsuarios = AdaptadorDifusion.DifusionUsuarios;
+        if(!nombregrupo.isEmpty() && grupoUsuarios.size()>0){
+
+            for(int i=0;i<grupoUsuarios.size();i++){
                 //recorremos los usuarios uno a uno
-                MoldeUsuario usuario=difusionUsuarios.get(i);
-                //establecemos donde va hacer la conexion con firebase en la rama chat
-                FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_CHAT).child(usuario.getChatRef());
-                //establecemos el mensaje
-                Map<String,String> nuevomensaje=new HashMap<>();
-                nuevomensaje.put("emisor",usuario.getUidemisor());
-                nuevomensaje.put("receptor",usuario.getUidreceptor());
-                nuevomensaje.put("mensaje",enviarmensaje);
-                FirebaseChat.push().setValue(nuevomensaje);
+                MoldeUsuario usuario=grupoUsuarios.get(i);
+                //se estable una clave unica para cada grupo con el fin de tener mas de un grupo con el mismo nombre
+                FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_GROUPS).child(nombregrupo+'-'+usuario.getUidemisor());
+                //establecemos los objetos que se crearan en dentro de cada grupo
+                //haciendolo de esta forma se podra añadir usuarios al grupo usando el mismo nombre del grupo
+                FirebaseChat.child(usuario.getUidreceptor()).setValue(usuario.getnombre());
                 mensajeTV.setText("");
             }
-            Snackbar.make(rootView,"Mensaje enviado correctamente",Snackbar.LENGTH_LONG).show();
+            //ahora se añade al profesor que ha creado el grupo
+            MoldeUsuario usuario=grupoUsuarios.get(1);
+            FirebaseChat.child(usuario.getUidemisor()).setValue(usuario.getEnombre());
+            Snackbar.make(rootView,"Grupo creado correctamente",Snackbar.LENGTH_LONG).show();
         }else {
-            if(enviarmensaje.isEmpty()){
-                Snackbar.make(rootView, "Escribe para poder enviar el mensaje", Snackbar.LENGTH_LONG).show();
+            if(nombregrupo.isEmpty()){
+                Snackbar.make(rootView, "Escribe el nombre del grupo", Snackbar.LENGTH_LONG).show();
             }else {
-                if (difusionUsuarios.size() == 0) {
-                    Snackbar.make(rootView, "Selecciona alumnos para hacer la difusion", Snackbar.LENGTH_LONG).show();
+                if (grupoUsuarios.size() == 0) {
+                    Snackbar.make(rootView, "Selecciona alumnos para hacer la creacion del grupo", Snackbar.LENGTH_LONG).show();
                 }
             }
         }
