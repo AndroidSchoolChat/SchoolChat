@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="45dp"
+    android:layout_height="75dp"
     android:layout_marginBottom="4dp"
     android:background="@color/colorPrimaryDark">
     <TextView
@@ -14,11 +14,9 @@
         android:textSize="17sp"
         android:textStyle="bold"
         android:textColor="@color/colorAccent"
-        android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="34dp"
-        android:layout_marginStart="34dp" />
+        android:layout_above="@+id/curso"
+        android:layout_toRightOf="@+id/elegir"
+        android:layout_toEndOf="@+id/elegir"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,9 +24,9 @@
         tools:text="1ºDam"
         android:textSize="17sp"
         android:textColor="@color/primary_light"
-        android:textStyle="bold"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignBottom="@+id/elegir"
+        android:layout_toRightOf="@+id/elegir"
+        android:layout_toEndOf="@+id/elegir" />
 
     <CheckBox
         android:layout_width="wrap_content"
