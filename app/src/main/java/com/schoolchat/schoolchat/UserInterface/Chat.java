@@ -25,15 +25,15 @@ import java.util.Map;
 
 public class Chat extends AppCompatActivity {
     private RecyclerView recyclerViewChat;
-    private TextView mensajeTV;
+    private TextView tvMensaje;
     private AdaptadorConversacion adaptadorConversacion;
     //Emisor o Receptor
     private static final int Emisor=0;
     private static final int Receptor=1;
     //uid receptor
-    private String Uidreceptor;
+    private String UidReceptor;
     //uid emisor
-    private String Uidemisor;
+    private String UidEmisor;
     //referencia a firebase para una esta conversacion
     private Firebase FirebaseChat;
     //Listener para
@@ -45,24 +45,24 @@ public class Chat extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         //informacion de la actividad anterior
-        Intent DatosUsuarios=getIntent();
-        MoldeUsuario DatosUsuariosMolde=DatosUsuarios.getParcelableExtra(conexion.INFO_USER);
+        Intent inDatosUsuario=getIntent();
+        MoldeUsuario moldeDatosUsuario=inDatosUsuario.getParcelableExtra(conexion.INFO_USUARIO);
         //set uid receptor
-        Uidreceptor=DatosUsuariosMolde.getUidreceptor();
+        UidReceptor =moldeDatosUsuario.getUidReceptor();
         //set uid emisor
-        Uidemisor=DatosUsuariosMolde.getUidemisor();
-        nombreEmisor=DatosUsuariosMolde.getEnombre();
+        UidEmisor =moldeDatosUsuario.getUidEmisor();
+        nombreEmisor=moldeDatosUsuario.getEmisorNombre();
         //establecer adaptador para chat
         recyclerViewChat=(RecyclerView)findViewById(R.id.chat_recycler_view);
         //asignar el edittext a un textview
-        mensajeTV=(TextView)findViewById(R.id.textoenviar);
+        tvMensaje =(TextView)findViewById(R.id.textoenviar);
         recyclerViewChat.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewChat.setHasFixedSize(true);
         List<MoldeMensajes> chatvacio=new ArrayList<MoldeMensajes>();
         adaptadorConversacion=new AdaptadorConversacion(chatvacio);
         recyclerViewChat.setAdapter(adaptadorConversacion);
-        FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_CHAT).child(DatosUsuariosMolde.getChatRef());
-        setTitle(DatosUsuariosMolde.getnombre());
+        FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_CHAT).child(moldeDatosUsuario.getChatRef());
+        setTitle(moldeDatosUsuario.getnombre());
     }
     @Override
     protected void onResume() {
@@ -82,7 +82,7 @@ public class Chat extends AppCompatActivity {
                 //establece quie es el emisor y el receptor
                 if(dataSnapshot.exists()){
                     MoldeMensajes nuevomensaje=dataSnapshot.getValue(MoldeMensajes.class);
-                    if(nuevomensaje.getEmisor().equals(Uidemisor)){
+                    if(nuevomensaje.getEmisor().equals(UidEmisor)){
                         nuevomensaje.setReceptorOEmisor(Emisor);
                     }else{
                         nuevomensaje.setReceptorOEmisor(Receptor);
@@ -129,16 +129,16 @@ public class Chat extends AppCompatActivity {
     }
     //evento para enviar mensajes
     public void botonenviar(View view){
-        String enviarmensaje=mensajeTV.getText().toString();
+        String enviarmensaje= tvMensaje.getText().toString();
         enviarmensaje=enviarmensaje.trim();
         enviarmensaje=nombreEmisor+':'+enviarmensaje;
         if(!enviarmensaje.isEmpty()){
-            Map<String,String> nuevomensaje=new HashMap<>();
-            nuevomensaje.put("emisor",Uidemisor);
-            nuevomensaje.put("receptor",Uidreceptor);
-            nuevomensaje.put("mensaje",enviarmensaje);
-            FirebaseChat.push().setValue(nuevomensaje);
-            mensajeTV.setText("");
+            Map<String,String> mapNuevoMensaje=new HashMap<>();
+            mapNuevoMensaje.put("emisor", UidEmisor);
+            mapNuevoMensaje.put("receptor", UidReceptor);
+            mapNuevoMensaje.put("mensaje",enviarmensaje);
+            FirebaseChat.push().setValue(mapNuevoMensaje);
+            tvMensaje.setText("");
         }
     }
 

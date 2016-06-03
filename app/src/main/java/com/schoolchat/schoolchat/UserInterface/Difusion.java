@@ -14,10 +14,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
-import com.firebase.client.ValueEventListener;
 import com.schoolchat.schoolchat.Adaptadores.AdaptadorDifusion;
-import com.schoolchat.schoolchat.Adaptadores.AdaptadorUsuarios;
 import com.schoolchat.schoolchat.Firebase.conexion;
 import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
@@ -40,7 +37,7 @@ public class Difusion extends AppCompatActivity {
     private String actualUsuarioUid;
     private String actualUsuarioEmail;
     private ChildEventListener listaUsuarios;
-    private TextView mensajeTV;
+    private TextView tvMensaje;
     private Firebase ramaProfesores;
     private ChildEventListener listaProfesores;
     private Firebase FirebaseChat;
@@ -50,13 +47,13 @@ public class Difusion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_difusion);//para poder usar snackBar
         rootView=findViewById(R.id.root);
-        mensajeTV=(TextView)findViewById(R.id.textoenviar);
+        tvMensaje =(TextView)findViewById(R.id.textoenviar);
         //Iniciamos Firebase
         starFirebase.setAndroidContext(this);
         starFirebase=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
         //rama usuarios
-        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_USERS);
-        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_PROFE);
+        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_ALUMNOS);
+        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_PROFESORES);
         //refencia al recyclerview
         listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
         //inicializar adaptador
@@ -98,12 +95,12 @@ public class Difusion extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s){
                 if(dataSnapshot.exists()){
                     //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
-                    String Uidprofe=dataSnapshot.getKey();
-                    if(Uidprofe.equals(actualUsuarioUid)){
+                    String UidProfe=dataSnapshot.getKey();
+                    if(UidProfe.equals(actualUsuarioUid)){
                         //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
-                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getnombre();
-                        String creado=actualusuario.getcreado();
+                        MoldeUsuario moldeActualUsu=dataSnapshot.getValue(MoldeUsuario.class);
+                        String nombreUsuario=moldeActualUsu.getnombre();
+                        String creado=moldeActualUsu.getcreado();
                         adaptadordifusion.setNombre_Fechauser(nombreUsuario,creado);
                     }
                 }
@@ -112,12 +109,12 @@ public class Difusion extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if(dataSnapshot.exists()) {
-                    String Uidprofe = dataSnapshot.getKey();
-                    if (!Uidprofe.equals(actualUsuarioUid)) {
+                    String UidProfe = dataSnapshot.getKey();
+                    if (!UidProfe.equals(actualUsuarioUid)) {
                         MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidprofe);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
+                        usuario.setUidReceptor(UidProfe);
+                        usuario.setEmisorEmail(actualUsuarioEmail);
+                        usuario.setUidEmisor(actualUsuarioUid);
 
 
                     }
@@ -152,22 +149,22 @@ public class Difusion extends AppCompatActivity {
 
                 if(dataSnapshot.exists()){
                     //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
-                    String Uidusuario=dataSnapshot.getKey();
-                    if(!Uidusuario.equals(actualUsuarioUid)){
+                    String UidUsu=dataSnapshot.getKey();
+                    if(!UidUsu.equals(actualUsuarioUid)){
                         //obtener datos del receptor que estan firebase
-                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
+                        MoldeUsuario moldeUsu=dataSnapshot.getValue(MoldeUsuario.class);
                         //añadir uid del receptor
-                        usuario.setUidreceptor(Uidusuario);
-                        //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        miListaClaveUsuarios.add(Uidusuario);
-                        adaptadordifusion.refill(usuario);
+                        moldeUsu.setUidReceptor(UidUsu);
+                        //añadir informacion del actual moldeUsu emisor
+                        moldeUsu.setEmisorEmail(actualUsuarioEmail);
+                        moldeUsu.setUidEmisor(actualUsuarioUid);
+                        miListaClaveUsuarios.add(UidUsu);
+                        adaptadordifusion.refill(moldeUsu);
                     }else{
                         //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
-                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getnombre();
-                        String creado=actualusuario.getcreado();
+                        MoldeUsuario moldeActualUsu=dataSnapshot.getValue(MoldeUsuario.class);
+                        String nombreUsuario=moldeActualUsu.getnombre();
+                        String creado=moldeActualUsu.getcreado();
                         adaptadordifusion.setNombre_Fechauser(nombreUsuario,creado);
                     }
                 }
@@ -176,13 +173,13 @@ public class Difusion extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if(dataSnapshot.exists()){
-                    String Uidusuario=dataSnapshot.getKey();
-                    if(!Uidusuario.equals(actualUsuarioUid)){
+                    String UidUsuario=dataSnapshot.getKey();
+                    if(!UidUsuario.equals(actualUsuarioUid)){
                         MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidusuario);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        int index=miListaClaveUsuarios.indexOf(Uidusuario);
+                        usuario.setUidReceptor(UidUsuario);
+                        usuario.setEmisorEmail(actualUsuarioEmail);
+                        usuario.setUidEmisor(actualUsuarioUid);
+                        int index=miListaClaveUsuarios.indexOf(UidUsuario);
                     }
                 }
             }
@@ -205,10 +202,10 @@ public class Difusion extends AppCompatActivity {
 
     }
     protected void irLogin(){
-        Intent intent=new Intent(this,LogInActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Intent iLogin=new Intent(this,LogInActivity.class);
+        iLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        iLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(iLogin);
     }
     @Override
     public void onDestroy(){
@@ -221,30 +218,30 @@ public class Difusion extends AppCompatActivity {
         }
     }
     public void botonenviar(View view){
-        String enviarmensaje=mensajeTV.getText().toString();
+        String enviarmensaje= tvMensaje.getText().toString();
         enviarmensaje=enviarmensaje.trim();
         //llamamos a la variable que contiene los usuarios seleccionados y le asignamos una local
-        ArrayList<MoldeUsuario> difusionUsuarios = AdaptadorDifusion.DifusionUsuarios;
-        if(!enviarmensaje.isEmpty() && difusionUsuarios.size()>0){
-            for(int i=0;i<difusionUsuarios.size();i++){
+        ArrayList<MoldeUsuario> adaptDifUsu = AdaptadorDifusion.DifusionUsuarios;
+        if(!enviarmensaje.isEmpty() && adaptDifUsu.size()>0){
+            for(int i=0;i<adaptDifUsu.size();i++){
                 //recorremos los usuarios uno a uno
-                MoldeUsuario usuario=difusionUsuarios.get(i);
+                MoldeUsuario usuario=adaptDifUsu.get(i);
                 //establecemos donde va hacer la conexion con firebase en la rama chat
-                FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_CHAT).child(usuario.getChatRef());
+                FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_CHAT).child(usuario.getChatRef());
                 //establecemos el mensaje
-                Map<String,String> nuevomensaje=new HashMap<>();
-                nuevomensaje.put("emisor",usuario.getUidemisor());
-                nuevomensaje.put("receptor",usuario.getUidreceptor());
-                nuevomensaje.put("mensaje",enviarmensaje);
-                FirebaseChat.push().setValue(nuevomensaje);
-                mensajeTV.setText("");
+                Map<String,String> mapDifMensaje=new HashMap<>();
+                mapDifMensaje.put("emisor",usuario.getUidEmisor());
+                mapDifMensaje.put("receptor",usuario.getUidReceptor());
+                mapDifMensaje.put("mensaje",enviarmensaje);
+                FirebaseChat.push().setValue(mapDifMensaje);
+                tvMensaje.setText("");
             }
             Snackbar.make(rootView,"Mensaje enviado correctamente",Snackbar.LENGTH_LONG).show();
         }else {
             if(enviarmensaje.isEmpty()){
                 Snackbar.make(rootView, "Escribe para poder enviar el mensaje", Snackbar.LENGTH_LONG).show();
             }else {
-                if (difusionUsuarios.size() == 0) {
+                if (adaptDifUsu.size() == 0) {
                     Snackbar.make(rootView, "Selecciona alumnos para hacer la difusion", Snackbar.LENGTH_LONG).show();
                 }
             }

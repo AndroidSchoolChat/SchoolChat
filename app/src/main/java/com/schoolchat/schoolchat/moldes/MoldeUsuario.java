@@ -13,12 +13,12 @@ public class MoldeUsuario implements Parcelable{
     private String email;
     private String creado;
     private String conexion;
-    private String Uidreceptor;
+    private String UidReceptor;
     //informacion del emisor
-    private String enombre;
-    private String Uidemisor;
-    private String eEmail;
-    private String eCreado;
+    private String emisorNombre;
+    private String UidEmisor;
+    private String emisorEmail;
+    private String emisorCreado;
 
     public MoldeUsuario(){
 
@@ -30,11 +30,11 @@ public class MoldeUsuario implements Parcelable{
         email = in.readString();
         creado=in.readString();
         conexion = in.readString();
-        Uidreceptor = in.readString();
-        enombre = in.readString();
-        Uidemisor = in.readString();
-        eEmail = in.readString();
-        eCreado=in.readString();
+        UidReceptor = in.readString();
+        emisorNombre = in.readString();
+        UidEmisor = in.readString();
+        emisorEmail = in.readString();
+        emisorCreado =in.readString();
     }
     //informacion del receptor
     public String getnombre(){return nombre;}
@@ -46,30 +46,31 @@ public class MoldeUsuario implements Parcelable{
     public void setNombre(String nombre){this.nombre=nombre;}
     public void setEmail(String Email){this.email=Email;}
     public void setCreado(String creado){this.creado=creado;}
-    public String getUidreceptor(){return Uidreceptor;}
-    public void setUidreceptor(String Uidreceptor){this.Uidreceptor=Uidreceptor;}
+    public String getUidReceptor(){return UidReceptor;}
+    public void setUidReceptor(String Uidreceptor){this.UidReceptor =Uidreceptor;}
     //informacion del emisor
-    public void setEnombre(String enombre){this.enombre=enombre;}
-    public void seteEmail(String eEmail){this.eEmail=eEmail;}
-    public void seteCreado(String fecha){eCreado=fecha;}
-    public void setUidemisor(String uidemisor){this.Uidemisor=uidemisor;}
-    public String getEnombre(){return enombre;}
-    public String geteEmail(){return eEmail;}
-    public String geteCreado(){return eCreado;}
-    public String getUidemisor(){return Uidemisor;}
+    public void setEmisorNombre(String emisorNombre){this.emisorNombre = emisorNombre;}
+    public void setEmisorEmail(String emisorEmail){this.emisorEmail = emisorEmail;}
+    public void setEmisorCreado(String fecha){
+        emisorCreado =fecha;}
+    public void setUidEmisor(String uidEmisor){this.UidEmisor = uidEmisor;}
+    public String getEmisorNombre(){return emisorNombre;}
+    public String getEmisorEmail(){return emisorEmail;}
+    public String getEmisorCreado(){return emisorCreado;}
+    public String getUidEmisor(){return UidEmisor;}
 
     //parte para el chat
     public String getChatRef(){return createuniquechatref();}
     private String createuniquechatref(){
         String chatref="";
         if(fechaemisor()>fechareceptor()){
-            chatref=limpiarEamil(geteEmail())+"-"+limpiarEamil(getemail());
+            chatref=limpiarEamil(getEmisorEmail())+"-"+limpiarEamil(getemail());
         }else {
-            chatref=limpiarEamil(getemail())+"-"+limpiarEamil(geteEmail());
+            chatref=limpiarEamil(getemail())+"-"+limpiarEamil(getEmisorEmail());
         }
         return chatref;
     }
-    private long fechaemisor(){return Long.parseLong(geteCreado());}
+    private long fechaemisor(){return Long.parseLong(getEmisorCreado());}
     private long fechareceptor(){return Long.parseLong(getcreado());}
     private String limpiarEamil(String mail){
         return mail.replace(".","-");
@@ -82,11 +83,11 @@ public class MoldeUsuario implements Parcelable{
         dest.writeString(email);
         dest.writeString(creado);
         dest.writeString(conexion);
-        dest.writeString(Uidreceptor);
-        dest.writeString(enombre);
-        dest.writeString(Uidemisor);
-        dest.writeString(eEmail);
-        dest.writeString(eCreado);
+        dest.writeString(UidReceptor);
+        dest.writeString(emisorNombre);
+        dest.writeString(UidEmisor);
+        dest.writeString(emisorEmail);
+        dest.writeString(emisorCreado);
     }
 
     @Override

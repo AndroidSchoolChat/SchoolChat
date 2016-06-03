@@ -24,16 +24,14 @@ import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 //clase para la vista de los usuarios / grupos de la aplicacion
 
     private Firebase starFirebase;
     private RecyclerView listaRecyclerView;
-    private AdaptadorUsuarios AdaptadorUsuarios;
+    private AdaptadorUsuarios adaptUsu;
     private Firebase.AuthStateListener autentificar;
     private AuthData miAuthData;
     private String actualUsuarioUid;
@@ -46,8 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private ChildEventListener listaGrupos;
     private ArrayList<String> miListaClaveUsuarios;
     private Firebase EstadoConexion;
-    private Firebase estadoConexionProfe, estadoConexionUser;
-    private ValueEventListener cambioconexion;
+    private ValueEventListener cambioConexion;
     private View rootView;
     public boolean profesor= false;
 
@@ -62,18 +59,18 @@ public class MainActivity extends AppCompatActivity {
         starFirebase.setAndroidContext(this);
         starFirebase=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
         //rama usuarios
-        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_USERS);
-        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_PROFE);
-        ramaGrupo=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_GROUPS);
+        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_ALUMNOS);
+        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_PROFESORES);
+        ramaGrupo=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_GRUPOS);
         //refencia al recyclerview
         listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
         //inicializar adaptador
         List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
-        AdaptadorUsuarios =new AdaptadorUsuarios(this,listavacia);
+        adaptUsu =new AdaptadorUsuarios(this,listavacia);
         //conectar recyclerview al adpatadorusuario
         listaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         listaRecyclerView.setHasFixedSize(true);
-        listaRecyclerView.setAdapter(AdaptadorUsuarios);
+        listaRecyclerView.setAdapter(adaptUsu);
         miListaClaveUsuarios=new ArrayList<String>();
         autentificar=new Firebase.AuthStateListener(){
 
@@ -114,22 +111,22 @@ public class MainActivity extends AppCompatActivity {
                         //obtener datos del receptor que estan firebase
                         MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
                         //añadir uid del receptor
-                        usuario.setUidreceptor(Uidusuario);
+                        usuario.setUidReceptor(Uidusuario);
                         //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
+                        usuario.setEmisorEmail(actualUsuarioEmail);
+                        usuario.setUidEmisor(actualUsuarioUid);
                         miListaClaveUsuarios.add(Uidusuario);
-                        AdaptadorUsuarios.refill(usuario);
+                        adaptUsu.refill(usuario);
                     }else{
                         //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
                         MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
                         String nombreUsuario=actualusuario.getnombre();
                         String creado=actualusuario.getcreado();
-                        AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
+                        adaptUsu.setNombre_Fechauser(nombreUsuario,creado);
                         //guarda el estado de conexion del usuario
-                        EstadoConexion=ramaUsuarios.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
+                        EstadoConexion=ramaUsuarios.child(actualUsuarioUid).child(conexion.RAMA_CONEXION);
                         //listener para cuando cambia el estado de conexion
-                        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+                        cambioConexion =starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 boolean conectado = (Boolean) dataSnapshot.getValue();
                                 if (conectado) {
@@ -157,11 +154,11 @@ public class MainActivity extends AppCompatActivity {
                     String Uidusuario=dataSnapshot.getKey();
                     if(!Uidusuario.equals(actualUsuarioUid)){
                         MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidusuario);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
+                        usuario.setUidReceptor(Uidusuario);
+                        usuario.setEmisorEmail(actualUsuarioEmail);
+                        usuario.setUidEmisor(actualUsuarioUid);
                         int index=miListaClaveUsuarios.indexOf(Uidusuario);
-                        AdaptadorUsuarios.cambioUsuario(index,usuario);
+                        adaptUsu.cambioUsuario(index,usuario);
                     }
                 }
             }
@@ -196,22 +193,22 @@ public class MainActivity extends AppCompatActivity {
                         //obtener datos del receptor que estan firebase
                         MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
                         //añadir uid del receptor
-                        usuario.setUidreceptor(Uidprofe);
+                        usuario.setUidReceptor(Uidprofe);
                         //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
+                        usuario.setEmisorEmail(actualUsuarioEmail);
+                        usuario.setUidEmisor(actualUsuarioUid);
                         miListaClaveUsuarios.add(Uidprofe);
-                        AdaptadorUsuarios.refill(usuario);
+                        adaptUsu.refill(usuario);
                     }else{
                         //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
                         MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
                         String nombreUsuario=actualusuario.getnombre();
                         String creado=actualusuario.getcreado();
-                        AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
+                        adaptUsu.setNombre_Fechauser(nombreUsuario,creado);
                         //guarda el estado de conexion del usuario
-                        EstadoConexion=ramaProfesores.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
+                        EstadoConexion=ramaProfesores.child(actualUsuarioUid).child(conexion.RAMA_CONEXION);
                         //listener para cuando cambia el estado de conexion
-                        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
+                        cambioConexion =starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 boolean conectado = (Boolean) dataSnapshot.getValue();
                                 if (conectado) {
@@ -237,12 +234,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if(dataSnapshot.exists()) {
-                    String Uidprofe = dataSnapshot.getKey();
-                    if (!Uidprofe.equals(actualUsuarioUid)) {
-                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidprofe);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
+                    String UidProfe = dataSnapshot.getKey();
+                    if (!UidProfe.equals(actualUsuarioUid)) {
+                        MoldeUsuario moldeUsu = dataSnapshot.getValue(MoldeUsuario.class);
+                        moldeUsu.setUidReceptor(UidProfe);
+                        moldeUsu.setEmisorEmail(actualUsuarioEmail);
+                        moldeUsu.setUidEmisor(actualUsuarioUid);
 
 
                     }
@@ -283,23 +280,23 @@ public class MainActivity extends AppCompatActivity {
 
                     if(dataSnapshot.child(actualUsuarioUid).exists()) {
                         //creamos lo que va a ser un grupo
-                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
+                        MoldeUsuario moldeGrupoUsu = dataSnapshot.getValue(MoldeUsuario.class);
                         //se añade toda la informacion necesaria para acceder al chat puesto que no esta guardada en firebase
                         //añadir uid del receptor
-                        usuario.setUidreceptor(UidGrupo);
-                        //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(UidGrupo);
-                        usuario.setUidemisor(actualUsuarioUid);
+                        moldeGrupoUsu.setUidReceptor(UidGrupo);
+                        //añadir informacion del actual moldeGrupoUsu emisor
+                        moldeGrupoUsu.setEmisorEmail(UidGrupo);
+                        moldeGrupoUsu.setUidEmisor(actualUsuarioUid);
                         //esto es necesario para que no se rompa la aplicacion
-                        usuario.setConexion("desconectado");
-                        usuario.setNombre(nombreGrupo);
+                        moldeGrupoUsu.setConexion("desconectado");
+                        moldeGrupoUsu.setNombre(nombreGrupo);
                         //este campo esta vacia para tener una sola referencia en la rama chat y se pueda acceder a ella con distintos usuarios
-                        usuario.setEmail("");
+                        moldeGrupoUsu.setEmail("");
                         //el valor de esta variables da un poco igual pero son necesaria para que funcione la actividad del chat
-                        usuario.setCreado("0");
-                        usuario.seteCreado("1");
+                        moldeGrupoUsu.setCreado("0");
+                        moldeGrupoUsu.setEmisorCreado("1");
                         miListaClaveUsuarios.add(UidGrupo);
-                        AdaptadorUsuarios.refill(usuario);
+                        adaptUsu.refill(moldeGrupoUsu);
 
                     }
                 }
@@ -329,10 +326,10 @@ public class MainActivity extends AppCompatActivity {
 
     //metodo para ir al login
     protected void irLogin(){
-        Intent intent=new Intent(this,LogInActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Intent inLogin=new Intent(this,LogInActivity.class);
+        inLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        inLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(inLogin);
     }
 
     @Override
@@ -359,8 +356,8 @@ public class MainActivity extends AppCompatActivity {
         if(listaUsuarios!=null){
             ramaUsuarios.removeEventListener(listaUsuarios);
         }
-        if(cambioconexion!=null){
-            starFirebase.getRoot().child(".info/connected").removeEventListener(cambioconexion);
+        if(cambioConexion !=null){
+            starFirebase.getRoot().child(".info/connected").removeEventListener(cambioConexion);
         }
         if(listaProfesores!=null){
             ramaProfesores.removeEventListener(listaProfesores);
@@ -408,11 +405,11 @@ public class MainActivity extends AppCompatActivity {
     }
     //metodo para lanzar la actividad difusion
     protected void difusion(){
-        Intent i=new Intent(MainActivity.this,Difusion.class);
-        startActivity(i);
+        Intent inDifusion=new Intent(MainActivity.this,Difusion.class);
+        startActivity(inDifusion);
     }
     protected void crearGrupo(){
-        Intent i=new Intent(MainActivity.this,Grupo.class);
-        startActivity(i);
+        Intent inGrupo=new Intent(MainActivity.this,Grupo.class);
+        startActivity(inGrupo);
     }
 }

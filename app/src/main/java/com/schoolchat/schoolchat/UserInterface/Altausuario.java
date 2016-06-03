@@ -3,13 +3,10 @@ package com.schoolchat.schoolchat.UserInterface;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -28,23 +25,17 @@ import java.util.Map;
 
 public class Altausuario extends AppCompatActivity {
 
-    private Button botonRegistrarse;
-    private Button botonCancelar;
+    private EditText edEm;
+    private EditText edNomUsu;
+    private EditText edContras;
+    private EditText edContrasVerif;
 
-    private EditText ed_Em;
-    private EditText ed_NomUsu;
-    private EditText ed_Cont;
+    private RadioButton rbProf;
 
+    private Spinner spCurso;
 
-    private EditText ed_ContVerif;
+    public String snapVerif;
 
-    private RadioButton rb_alum;
-    private RadioButton rb_prof;
-
-
-    private Spinner curso;
-
-    public String verif;
     View rootView;
 
 
@@ -56,28 +47,25 @@ public class Altausuario extends AppCompatActivity {
         //para poder usar snackBar
         rootView=findViewById(R.id.root);
 
-        botonRegistrarse = (Button) findViewById(R.id.bt_Registrarse);
-        botonCancelar = (Button) findViewById(R.id.bt_Cancelar);
-
-        ed_Em = (EditText) findViewById(R.id.ed_Email);
-        ed_NomUsu = (EditText) findViewById(R.id.ed_NombreUsuario);
-        ed_Cont = (EditText) findViewById(R.id.ed_Contraseña);
-
-        rb_alum = (RadioButton) findViewById(R.id.rb_Alumno);
-        rb_prof = (RadioButton) findViewById(R.id.rb_Profesor);
+        edEm = (EditText) findViewById(R.id.ed_Email);
+        edNomUsu = (EditText) findViewById(R.id.ed_NombreUsuario);
+        edContras = (EditText) findViewById(R.id.ed_Contraseña);
 
 
-        curso = (Spinner) findViewById(R.id.sp_Curso);
+        rbProf = (RadioButton) findViewById(R.id.rb_Profesor);
+
+
+        spCurso = (Spinner) findViewById(R.id.sp_Curso);
         //Verificacion si es profesor:
-        ed_ContVerif = (EditText) findViewById(R.id.ed_ContraseñaVerif);
+        edContrasVerif = (EditText) findViewById(R.id.ed_ContraseñaVerif);
 
         //Creamos el arrayAdapter para añadir los valores del array al spinner:
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adaptCurso = ArrayAdapter.createFromResource(this,
                 R.array.Curso, android.R.layout.simple_spinner_item);
 
         //Especificar el tipo de Spinner y su layout:
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        curso.setAdapter(adapter);
+        adaptCurso.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spCurso.setAdapter(adaptCurso);
 
     }
 
@@ -87,14 +75,14 @@ public class Altausuario extends AppCompatActivity {
         switch(view.getId()) {
             case R.id.rb_Alumno:
                 if (checked)
-                curso.setVisibility(View.VISIBLE);
-                ed_ContVerif.setVisibility(View.INVISIBLE);
-
+                spCurso.setVisibility(View.VISIBLE);
+                edContrasVerif.setVisibility(View.INVISIBLE);
                     break;
+
             case R.id.rb_Profesor:
                 if (checked)
-                    ed_ContVerif.setVisibility(View.VISIBLE);
-                    curso.setVisibility(View.INVISIBLE);
+                    edContrasVerif.setVisibility(View.VISIBLE);
+                    spCurso.setVisibility(View.INVISIBLE);
                     break;
         }
     }
@@ -112,40 +100,40 @@ public class Altausuario extends AppCompatActivity {
 
         //**--Codigo para el registro del PROFESOR:--*
 
-        if (rb_prof.isChecked()) {
+        if (rbProf.isChecked()) {
 
             //variables para registro de profesor pasadas a string
-            final String useremailProf = ed_Em.getText().toString();
-            final String userNameProf = ed_NomUsu.getText().toString();
-            final String userpasswordProf = ed_Cont.getText().toString();
+            final String RegEmProf = edEm.getText().toString();
+            final String RegNomUsuProf = edNomUsu.getText().toString();
+            final String RegContrasProf = edContras.getText().toString();
 
             //Comprobacion que en los campos se haya introducido datos:
-            if (useremailProf.isEmpty() || userNameProf.isEmpty() || userpasswordProf.isEmpty()) {
+            if (RegEmProf.isEmpty() || RegNomUsuProf.isEmpty() || RegContrasProf.isEmpty()) {
                 MostrarError("Asegurese de que todos los campos esten rellenos.");
 
             } else {
 
                 //Conexion a FireBase para recuperar el valor de la contraseña de verificacion:
 
-                final Firebase FireBaseDatos = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-                FireBaseDatos.addListenerForSingleValueEvent(new ValueEventListener(){
+                final Firebase FireBRegProf = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                FireBRegProf.addListenerForSingleValueEvent(new ValueEventListener(){
                     public void onDataChange(DataSnapshot snapshot) {
 
-                        verif = (String) snapshot.child("VerifyPassword").child("pass").getValue();
+                        snapVerif = (String) snapshot.child("VerifyPassword").child("pass").getValue();
 
                         //Comprobacion en el IF de que la contraseña de verificacion introducida es correcta.
 
-                        if(verif.equals(ed_ContVerif.getText().toString())){
+                        if(snapVerif.equals(edContrasVerif.getText().toString())){
 
                             //En caso de ser correcto creara el usuario.
                             final Firebase registroProfesor = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
 
-                            final String finalUserEmail = useremailProf;
-                            final String finalUserPassword = userpasswordProf;
-                            final String finalUserName = userNameProf;
+                            final String addEmProf = RegEmProf;
+                            final String addContrasProf = RegContrasProf;
+                            final String addNomUsuProf = RegNomUsuProf;
 
                             //crear el usuario
-                            registroProfesor.createUser(useremailProf, userpasswordProf, new Firebase.ValueResultHandler<Map<String, Object>>() {
+                            registroProfesor.createUser(RegEmProf, RegContrasProf, new Firebase.ValueResultHandler<Map<String, Object>>() {
 
 
                                 @Override
@@ -153,29 +141,25 @@ public class Altausuario extends AppCompatActivity {
 
                                     Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_LONG).show();
 
-                                    registroProfesor.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
+                                    registroProfesor.authWithPassword(addEmProf, addContrasProf, new Firebase.AuthResultHandler() {
 
                                         @Override
                                         public void onAuthenticated(AuthData authData) {
-                                            Map<String, Object> map = new HashMap<String, Object>();
-                                            map.put(conexion.NOMBRE, finalUserName);
-                                            map.put(conexion.USER_EMAIL, finalUserEmail);
-                                            map.put(conexion.CHILD_CONNECT, conexion.ESTADO_OFFLINE);
+                                            Map<String, Object> mapProf = new HashMap<String, Object>();
+                                            mapProf.put(conexion.INFO_NOMBRE, addNomUsuProf);
+                                            mapProf.put(conexion.INFO_EMAIL, addEmProf);
+                                            mapProf.put(conexion.RAMA_CONEXION, conexion.ESTADO_OFFLINE);
+
+                                            long fechaCreacionProf = new Date().getTime();
+                                            mapProf.put(conexion.INFO_FECHA, String.valueOf(fechaCreacionProf));
 
 
-                                            Date fecha = new Date();
-                                            map.put(conexion.FECHA, fecha);
+                                            registroProfesor.child(conexion.RAMA_PROFESORES).child(authData.getUid()).setValue(mapProf); //Añade los datos a Firebase en la pestaña de PROFESOR
 
-
-
-                                            registroProfesor.child(conexion.CHILD_PROFE).child(authData.getUid()).setValue(map); //Añade los datos a Firebase en la pestaña de PROFESOR
-
-
-
-                                                Intent return_login = new Intent(Altausuario.this, LogInActivity.class);
-                                                return_login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                return_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                startActivity(return_login);
+                                                Intent inReturnLogin = new Intent(Altausuario.this, LogInActivity.class);
+                                                inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                startActivity(inReturnLogin);
 
                                         }
 
@@ -196,7 +180,6 @@ public class Altausuario extends AppCompatActivity {
 
                             //En caso de no ser correcta la contraseña se muestrara el mensaje de error correspondiente.
                         }else{
-
 
                                 AlertDialog.Builder errorVerif = new AlertDialog.Builder(Altausuario.this);
                                 errorVerif.setMessage(R.string.errorVerif);
@@ -220,22 +203,22 @@ public class Altausuario extends AppCompatActivity {
             //**--Codigo para el registro del ALUMNO:--*
 
             //variables para registro pasadas a string
-            String useremailAlum = ed_Em.getText().toString();
-            String userNameAlum = ed_NomUsu.getText().toString();
-            String userpasswordAlum = ed_Cont.getText().toString();
-            if (useremailAlum.isEmpty() || userNameAlum.isEmpty() || userpasswordAlum.isEmpty()) {
+            String RegEmUsu = edEm.getText().toString();
+            String RegNomUsu = edNomUsu.getText().toString();
+            String RegContrasUsu = edContras.getText().toString();
+            if (RegEmUsu.isEmpty() || RegNomUsu.isEmpty() || RegContrasUsu.isEmpty()) {
                 MostrarError("Asegurese de que todos los campos esten rellenos.");
             } else {
-                final Firebase registroUsuario = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-                final String finalUserEmail = useremailAlum;
-                final String finalUserPassword = userpasswordAlum;
-                final String finalUserName = userNameAlum;
+                final Firebase FireBRegUsu = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                final String addEmUsu = RegEmUsu;
+                final String addContrasUsu = RegContrasUsu;
+                final String addNomUsu = RegNomUsu;
 
                 //Obtiene la opcion elegida del spinner:
-                final String cursoTexto=curso.getSelectedItem().toString();
+                final String spCursoTexto= spCurso.getSelectedItem().toString();
 
                 //crear el usuario
-                registroUsuario.createUser(useremailAlum, userpasswordAlum, new Firebase.ValueResultHandler<Map<String, Object>>() {
+                FireBRegUsu.createUser(RegEmUsu, RegContrasUsu, new Firebase.ValueResultHandler<Map<String, Object>>() {
 
 
                     @Override
@@ -243,29 +226,26 @@ public class Altausuario extends AppCompatActivity {
 
                          Snackbar.make(rootView, "Se ha registrado un nuevo alumno.", Snackbar.LENGTH_LONG).show();
 
-                        registroUsuario.authWithPassword(finalUserEmail, finalUserPassword, new Firebase.AuthResultHandler() {
+                        FireBRegUsu.authWithPassword(addEmUsu, addContrasUsu, new Firebase.AuthResultHandler() {
 
                             @Override
                             public void onAuthenticated(AuthData authData) {
-                                Map<String, Object> map = new HashMap<String, Object>();
-                                map.put(conexion.NOMBRE, finalUserName);
-                                map.put(conexion.USER_EMAIL, finalUserEmail);
-                                map.put(conexion.CHILD_CONNECT, conexion.ESTADO_OFFLINE);
-                                map.put(conexion.CURSO,cursoTexto);
+                                Map<String, Object> mapAlum = new HashMap<String, Object>();
+                                mapAlum.put(conexion.INFO_NOMBRE, addNomUsu);
+                                mapAlum.put(conexion.INFO_EMAIL, addEmUsu);
+                                mapAlum.put(conexion.RAMA_CONEXION, conexion.ESTADO_OFFLINE);
+                                mapAlum.put(conexion.INFO_CURSO,spCursoTexto);
+
+                                long fechaCreacionAlum = new Date().getTime();
+                                mapAlum.put(conexion.INFO_FECHA, String.valueOf(fechaCreacionAlum));
 
 
-                                Date fecha = new Date();
-                                map.put(conexion.FECHA, fecha);
+                                FireBRegUsu.child(conexion.RAMA_ALUMNOS).child(authData.getUid()).setValue(mapAlum); //Añade datos en la pestaña de usuarios.
 
-
-
-                                registroUsuario.child(conexion.CHILD_USERS).child(authData.getUid()).setValue(map); //Añade datos en la pestaña de usuarios.
-
-
-                                Intent return_login = new Intent(Altausuario.this, LogInActivity.class);
-                                return_login.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                return_login.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(return_login);
+                                Intent inReturnLogin = new Intent(Altausuario.this, LogInActivity.class);
+                                inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(inReturnLogin);
                             }
 
                             @Override
@@ -303,10 +283,10 @@ public class Altausuario extends AppCompatActivity {
 
     //La accion de cancelar te devuelve al la actividad de LogIn
     public void onCancelar(View v) {
-        Intent j = new Intent(this, LogInActivity.class);
-        j.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        j.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(j);
+        Intent inCancReg = new Intent(this, LogInActivity.class);
+        inCancReg.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        inCancReg.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(inCancReg);
     }
 
 

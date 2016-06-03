@@ -87,11 +87,11 @@ public class AdaptadorUsuarios extends RecyclerView.Adapter<AdaptadorUsuarios.Vi
         @Override
         public void onClick(View v) {
             int posicion=getLayoutPosition();//obtine la posicion de la fila seleccionada
-            MoldeUsuario usuario=ListaUsuarios.get(posicion);
-            usuario.setEnombre(nombreuser);
-            usuario.seteCreado(fechacreacion);
+            MoldeUsuario moldeUsuario=ListaUsuarios.get(posicion);
+            moldeUsuario.setEmisorNombre(nombreuser);
+            moldeUsuario.setEmisorCreado(fechacreacion);
             Intent chat=new Intent(contextHolder,Chat.class);
-            chat.putExtra(conexion.INFO_USER,usuario);
+            chat.putExtra(conexion.INFO_USUARIO,moldeUsuario);
             contextHolder.startActivity(chat);
         }
     }

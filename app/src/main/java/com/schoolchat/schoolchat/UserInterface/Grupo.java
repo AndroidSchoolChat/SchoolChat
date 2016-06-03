@@ -20,23 +20,21 @@ import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Grupo extends AppCompatActivity {
     private View rootView;
     private Firebase starFirebase;
     private Firebase ramaUsuarios;
     private RecyclerView listaRecyclerView;
-    private AdaptadorDifusion adaptadordifusion;
+    private AdaptadorDifusion adaptDifusion;
     private ArrayList<String> miListaClaveUsuarios;
     private Firebase.AuthStateListener autentificar;
     private AuthData miAuthData;
     private String actualUsuarioUid;
     private String actualUsuarioEmail;
     private ChildEventListener listaUsuarios;
-    private TextView mensajeTV;
+    private TextView tvMensaje;
     private Firebase ramaProfesores;
     private ChildEventListener listaProfesores;
     private Firebase FirebaseChat;
@@ -45,22 +43,22 @@ public class Grupo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_grupo);
         rootView=findViewById(R.id.root);
-        mensajeTV=(TextView)findViewById(R.id.textoenviar);
+        tvMensaje =(TextView)findViewById(R.id.textoenviar);
         //Iniciamos Firebase
         starFirebase.setAndroidContext(this);
         starFirebase=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
         //rama usuarios
-        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_USERS);
-        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_PROFE);
+        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_ALUMNOS);
+        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_PROFESORES);
         //refencia al recyclerview
         listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
         //inicializar adaptador
         List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
-        adaptadordifusion =new AdaptadorDifusion(this,listavacia);
+        adaptDifusion =new AdaptadorDifusion(this,listavacia);
         //conectar recyclerview al adpatadorusuario
         listaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         listaRecyclerView.setHasFixedSize(true);
-        listaRecyclerView.setAdapter(adaptadordifusion);
+        listaRecyclerView.setAdapter(adaptDifusion);
         miListaClaveUsuarios=new ArrayList<String>();
         autentificar=new Firebase.AuthStateListener(){
 
@@ -96,10 +94,10 @@ public class Grupo extends AppCompatActivity {
                     String Uidprofe=dataSnapshot.getKey();
                     if(Uidprofe.equals(actualUsuarioUid)){
                         //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
-                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getnombre();
-                        String creado=actualusuario.getcreado();
-                        adaptadordifusion.setNombre_Fechauser(nombreUsuario,creado);
+                        MoldeUsuario actualUsu=dataSnapshot.getValue(MoldeUsuario.class);
+                        String nombreUsuario=actualUsu.getnombre();
+                        String creado=actualUsu.getcreado();
+                        adaptDifusion.setNombre_Fechauser(nombreUsuario,creado);
                     }
                 }
             }
@@ -107,12 +105,12 @@ public class Grupo extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if(dataSnapshot.exists()) {
-                    String Uidprofe = dataSnapshot.getKey();
-                    if (!Uidprofe.equals(actualUsuarioUid)) {
-                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidprofe);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
+                    String UidProfe = dataSnapshot.getKey();
+                    if (!UidProfe.equals(actualUsuarioUid)) {
+                        MoldeUsuario moldeUsu = dataSnapshot.getValue(MoldeUsuario.class);
+                        moldeUsu.setUidReceptor(UidProfe);
+                        moldeUsu.setEmisorEmail(actualUsuarioEmail);
+                        moldeUsu.setUidEmisor(actualUsuarioUid);
 
 
                     }
@@ -147,23 +145,23 @@ public class Grupo extends AppCompatActivity {
 
                 if(dataSnapshot.exists()){
                     //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
-                    String Uidusuario=dataSnapshot.getKey();
-                    if(!Uidusuario.equals(actualUsuarioUid)){
+                    String UidUsu=dataSnapshot.getKey();
+                    if(!UidUsu.equals(actualUsuarioUid)){
                         //obtener datos del receptor que estan firebase
-                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
+                        MoldeUsuario moldeUsu=dataSnapshot.getValue(MoldeUsuario.class);
                         //añadir uid del receptor
-                        usuario.setUidreceptor(Uidusuario);
-                        //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        miListaClaveUsuarios.add(Uidusuario);
-                        adaptadordifusion.refill(usuario);
+                        moldeUsu.setUidReceptor(UidUsu);
+                        //añadir informacion del actual moldeUsu emisor
+                        moldeUsu.setEmisorEmail(actualUsuarioEmail);
+                        moldeUsu.setUidEmisor(actualUsuarioUid);
+                        miListaClaveUsuarios.add(UidUsu);
+                        adaptDifusion.refill(moldeUsu);
                     }else{
                         //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
-                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getnombre();
-                        String creado=actualusuario.getcreado();
-                        adaptadordifusion.setNombre_Fechauser(nombreUsuario,creado);
+                        MoldeUsuario actualUsu=dataSnapshot.getValue(MoldeUsuario.class);
+                        String nombreUsuario=actualUsu.getnombre();
+                        String creadoUsu=actualUsu.getcreado();
+                        adaptDifusion.setNombre_Fechauser(nombreUsuario,creadoUsu);
                     }
                 }
             }
@@ -171,13 +169,13 @@ public class Grupo extends AppCompatActivity {
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 if(dataSnapshot.exists()){
-                    String Uidusuario=dataSnapshot.getKey();
-                    if(!Uidusuario.equals(actualUsuarioUid)){
-                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidusuario);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        int index=miListaClaveUsuarios.indexOf(Uidusuario);
+                    String UidUsu=dataSnapshot.getKey();
+                    if(!UidUsu.equals(actualUsuarioUid)){
+                        MoldeUsuario moldeUsu=dataSnapshot.getValue(MoldeUsuario.class);
+                        moldeUsu.setUidReceptor(UidUsu);
+                        moldeUsu.setEmisorEmail(actualUsuarioEmail);
+                        moldeUsu.setUidEmisor(actualUsuarioUid);
+                        int index=miListaClaveUsuarios.indexOf(UidUsu);
                     }
                 }
             }
@@ -200,10 +198,10 @@ public class Grupo extends AppCompatActivity {
 
     }
     protected void irLogin(){
-        Intent intent=new Intent(this,LogInActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        Intent iLogin=new Intent(this,LogInActivity.class);
+        iLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        iLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(iLogin);
     }
     @Override
     public void onDestroy(){
@@ -216,28 +214,28 @@ public class Grupo extends AppCompatActivity {
         }
     }
     public void botonenviar(View view){
-        String nombregrupo=mensajeTV.getText().toString();
-        nombregrupo=nombregrupo.trim();
+        String nombreGrupo= tvMensaje.getText().toString();
+        nombreGrupo=nombreGrupo.trim();
         //llamamos a la variable que contiene los usuarios seleccionados y le asignamos una local
         ArrayList<MoldeUsuario> grupoUsuarios = AdaptadorDifusion.DifusionUsuarios;
-        if(!nombregrupo.isEmpty() && grupoUsuarios.size()>0){
+        if(!nombreGrupo.isEmpty() && grupoUsuarios.size()>0){
 
             for(int i=0;i<grupoUsuarios.size();i++){
                 //recorremos los usuarios uno a uno
-                MoldeUsuario usuario=grupoUsuarios.get(i);
+                MoldeUsuario moldeGrupoUsu=grupoUsuarios.get(i);
                 //se estable una clave unica para cada grupo con el fin de tener mas de un grupo con el mismo nombre
-                FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_GROUPS).child(nombregrupo+'-'+usuario.getUidemisor());
+                FirebaseChat=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_GRUPOS).child(nombreGrupo+'-'+moldeGrupoUsu.getUidEmisor());
                 //establecemos los objetos que se crearan en dentro de cada grupo
                 //haciendolo de esta forma se podra añadir usuarios al grupo usando el mismo nombre del grupo
-                FirebaseChat.child(usuario.getUidreceptor()).setValue(usuario.getnombre());
-                mensajeTV.setText("");
+                FirebaseChat.child(moldeGrupoUsu.getUidReceptor()).setValue(moldeGrupoUsu.getnombre());
+                tvMensaje.setText("");
             }
             //ahora se añade al profesor que ha creado el grupo
             MoldeUsuario usuario=grupoUsuarios.get(1);
-            FirebaseChat.child(usuario.getUidemisor()).setValue(usuario.getEnombre());
+            FirebaseChat.child(usuario.getUidEmisor()).setValue(usuario.getEmisorNombre());
             Snackbar.make(rootView,"Grupo creado correctamente",Snackbar.LENGTH_LONG).show();
         }else {
-            if(nombregrupo.isEmpty()){
+            if(nombreGrupo.isEmpty()){
                 Snackbar.make(rootView, "Escribe el nombre del grupo", Snackbar.LENGTH_LONG).show();
             }else {
                 if (grupoUsuarios.size() == 0) {

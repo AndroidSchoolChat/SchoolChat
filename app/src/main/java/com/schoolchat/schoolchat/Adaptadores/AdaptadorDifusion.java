@@ -1,8 +1,6 @@
 package com.schoolchat.schoolchat.Adaptadores;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +8,9 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.schoolchat.schoolchat.Firebase.conexion;
 import com.schoolchat.schoolchat.R;
-import com.schoolchat.schoolchat.UserInterface.Chat;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 
 import java.util.ArrayList;
@@ -91,17 +87,17 @@ public class AdaptadorDifusion extends RecyclerView.Adapter<AdaptadorDifusion.Vi
         @Override
         public void onClick(View v) {
             int posicion=getLayoutPosition();//obtine la posicion de la fila seleccionada
-            MoldeUsuario usuario=ListaUsuarios.get(posicion);
-            usuario.setEnombre(nombreuser);
-            usuario.seteCreado(fechacreacion);
+            MoldeUsuario moldeUsuario=ListaUsuarios.get(posicion);
+            moldeUsuario.setEmisorNombre(nombreuser);
+            moldeUsuario.setEmisorCreado(fechacreacion);
             CheckBox chb=(CheckBox)v.findViewById(R.id.elegir);
-            //si el usuario seleccionado no ha sido seleccionado antes se introduce y su chexbox se pone en true
-            if(!DifusionUsuarios.contains(usuario)) {
-                DifusionUsuarios.add(usuario);
+            //si el moldeUsuario seleccionado no ha sido seleccionado antes se introduce y su chexbox se pone en true
+            if(!DifusionUsuarios.contains(moldeUsuario)) {
+                DifusionUsuarios.add(moldeUsuario);
                 chb.setChecked(true);
             }else{
-                //para deseleccionar un usuario se pulsa de nuevo sobre él para no volver ha introducirlo como ya esta se borra y su checkbox a false
-                DifusionUsuarios.remove(usuario);
+                //para deseleccionar un moldeUsuario se pulsa de nuevo sobre él para no volver ha introducirlo como ya esta se borra y su checkbox a false
+                DifusionUsuarios.remove(moldeUsuario);
                 chb.setChecked(false);
             }
         }
