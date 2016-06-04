@@ -63,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        starFirebase.setAndroidContext(this);
+        starFirebase=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
         //menu
 
         alumnoFragment fragment = new alumnoFragment();
@@ -82,8 +84,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        autentificar=new Firebase.AuthStateListener(){
+
+            @Override
+            public void onAuthStateChanged(AuthData authData) {
+                setAuthenticatedUser(authData);
+            }
+        };
+        starFirebase.addAuthStateListener(autentificar);
+
     }
 
+    private void setAuthenticatedUser(AuthData authData) {
+        miAuthData = authData;
+        if (authData != null) {
+            //la autentificacion del usuario no a experido
+            //obtener su Uid
+            actualUsuarioUid = authData.getUid();
+            //obtener su email
+            actualUsuarioEmail = (String) authData.getProviderData().get(conexion.KEY_EMAIL);
+
+        } else {
+            irLogin();
+        }
+    }
+
+    //metodo para ir al login
+    protected void irLogin(){
+        Intent intent=new Intent(this,LogInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 
 
     @Override
@@ -144,6 +177,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, fragment);
             fragmentTransaction.commit();
+        } else if (id==R.id.grupos) {
+            gruposFragment fragment = new gruposFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -152,7 +191,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //metodo para acabar la sesion
     private void logout(){
-
+        if(this.miAuthData!=null) {
+            EstadoConexion.setValue(conexion.ESTADO_OFFLINE);
+            starFirebase.unauth();
+            setAuthenticatedUser(null);
+        }
     }
     //metodo para lanzar la actividad difusion
     protected void difusion(){
