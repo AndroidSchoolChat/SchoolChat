@@ -2,10 +2,15 @@ package com.schoolchat.schoolchat.UserInterface;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,16 +29,14 @@ import com.schoolchat.schoolchat.R;
 import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 //clase para la vista de los usuarios / grupos de la aplicacion
 
-    private Firebase starFirebase;
-    private RecyclerView listaRecyclerView;
-    private AdaptadorUsuarios AdaptadorUsuarios;
+    protected Firebase starFirebase;
+    protected RecyclerView listaRecyclerView;
+    protected AdaptadorUsuarios AdaptadorUsuarios;
     private Firebase.AuthStateListener autentificar;
     private AuthData miAuthData;
     private String actualUsuarioUid;
@@ -50,320 +53,46 @@ public class MainActivity extends AppCompatActivity {
     private ValueEventListener cambioconexion;
     private View rootView;
     public boolean profesor= false;
+    NavigationView navigationView = null;
+    Toolbar toolbar = null;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //para poder usar snackBar
-        rootView=findViewById(R.id.root);
-        //Iniciamos Firebase
-        starFirebase.setAndroidContext(this);
-        starFirebase=new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-        //rama usuarios
-        ramaUsuarios=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_USERS);
-        ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_PROFE);
-        ramaGrupo=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.CHILD_GROUPS);
-        //refencia al recyclerview
-        listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerView);
-        //inicializar adaptador
-        List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
-        AdaptadorUsuarios =new AdaptadorUsuarios(this,listavacia);
-        //conectar recyclerview al adpatadorusuario
-        listaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        listaRecyclerView.setHasFixedSize(true);
-        listaRecyclerView.setAdapter(AdaptadorUsuarios);
-        miListaClaveUsuarios=new ArrayList<String>();
-        autentificar=new Firebase.AuthStateListener(){
 
-            @Override
-            public void onAuthStateChanged(AuthData authData) {
-                setAuthenticatedUser(authData);
-            }
-        };
-        starFirebase.addAuthStateListener(autentificar);
+        //menu
 
-    }
-    private void setAuthenticatedUser(AuthData authData){
-        miAuthData=authData;
-        if(authData!=null){
-            //la autentificacion del usuario no a experido
-            //obtener su Uid
-            actualUsuarioUid=authData.getUid();
-            //obtener su email
-            actualUsuarioEmail=(String)authData.getProviderData().get(conexion.KEY_EMAIL);
-            consultaUsuariosFirebase();
-            consultaProfesorFirebase();
-            consultaGruposfirebase();
-        }else{
-            irLogin();
-        }
-    }
-    private void consultaUsuariosFirebase(){
+        alumnoFragment fragment = new alumnoFragment();
+        android.support.v4.app.FragmentTransaction fragmentTransaction =
+                getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        fragmentTransaction.commit();
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        listaUsuarios=ramaUsuarios.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
-                if(dataSnapshot.exists()){
-                    //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
-                    String Uidusuario=dataSnapshot.getKey();
-                    if(!Uidusuario.equals(actualUsuarioUid)){
-                        //obtener datos del receptor que estan firebase
-                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        //añadir uid del receptor
-                        usuario.setUidreceptor(Uidusuario);
-                        //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        miListaClaveUsuarios.add(Uidusuario);
-                        AdaptadorUsuarios.refill(usuario);
-                    }else{
-                        //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
-                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getnombre();
-                        String creado=actualusuario.getcreado();
-                        AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
-                        //guarda el estado de conexion del usuario
-                        EstadoConexion=ramaUsuarios.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
-                        //listener para cuando cambia el estado de conexion
-                        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                boolean conectado = (Boolean) dataSnapshot.getValue();
-                                if (conectado) {
-                                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
-                                    //si el usuario se desconecta
-                                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
-                                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_LONG).show();
-                                } else {
-                                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_LONG).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-            //si el hay cambios en firebase sobre un usuario esto lo resgistra
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.exists()){
-                    String Uidusuario=dataSnapshot.getKey();
-                    if(!Uidusuario.equals(actualUsuarioUid)){
-                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidusuario);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        int index=miListaClaveUsuarios.indexOf(Uidusuario);
-                        AdaptadorUsuarios.cambioUsuario(index,usuario);
-                    }
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-
-
-    }
-    private void consultaProfesorFirebase(){
-        listaProfesores=ramaProfesores.addChildEventListener(new ChildEventListener(){
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s){
-                if(dataSnapshot.exists()){
-                    //esto provoca un bucle que empieza con el primer hijo de usuarios y acaba con el ultimo
-                    String Uidprofe=dataSnapshot.getKey();
-                    if(!Uidprofe.equals(actualUsuarioUid)){
-                        //obtener datos del receptor que estan firebase
-                        MoldeUsuario usuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        //añadir uid del receptor
-                        usuario.setUidreceptor(Uidprofe);
-                        //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        miListaClaveUsuarios.add(Uidprofe);
-                        AdaptadorUsuarios.refill(usuario);
-                    }else{
-                        //si se encuentra con si mismo en firebase se ponen los datos nombre y creacion para que funcione el chat
-                        MoldeUsuario actualusuario=dataSnapshot.getValue(MoldeUsuario.class);
-                        String nombreUsuario=actualusuario.getnombre();
-                        String creado=actualusuario.getcreado();
-                        AdaptadorUsuarios.setNombre_Fechauser(nombreUsuario,creado);
-                        //guarda el estado de conexion del usuario
-                        EstadoConexion=ramaProfesores.child(actualUsuarioUid).child(conexion.CHILD_CONNECT);
-                        //listener para cuando cambia el estado de conexion
-                        cambioconexion=starFirebase.getRoot().child(".info/connected").addValueEventListener(new ValueEventListener() {
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                boolean conectado = (Boolean) dataSnapshot.getValue();
-                                if (conectado) {
-                                    EstadoConexion.setValue(conexion.ESTADO_ONLINE);
-                                    //si el usuario se desconecta
-                                    EstadoConexion.onDisconnect().setValue(conexion.ESTADO_OFFLINE);
-                                    Snackbar.make(rootView, "conectado", Snackbar.LENGTH_SHORT).show();
-                                    profesor=true;
-                                } else {
-                                    Snackbar.make(rootView, "desconectado", Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
-                            }
-                        });
-                    }
-                }
-            }
-            //si el hay cambios en firebase sobre un usuario esto lo resgistra
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.exists()) {
-                    String Uidprofe = dataSnapshot.getKey();
-                    if (!Uidprofe.equals(actualUsuarioUid)) {
-                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
-                        usuario.setUidreceptor(Uidprofe);
-                        usuario.seteEmail(actualUsuarioEmail);
-                        usuario.setUidemisor(actualUsuarioUid);
-
-
-                    }
-                }
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
-
-
-    }
-    //parte para los grupos
-    private void consultaGruposfirebase(){
-        listaGrupos=ramaGrupo.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if(dataSnapshot.exists()){
-                    //cogemos el uid del grupo nombregrupo-uidprofecerador
-                    String UidGrupo=dataSnapshot.getKey();
-                    //buscamos donde esta el guion que une el nombre y el profe
-                    int guion=UidGrupo.indexOf('-');
-                    //obtenemos el nombre del grupo que esta dentro de Uid grupo
-                    String nombreGrupo=UidGrupo.substring(0,guion);
-
-                    if(dataSnapshot.child(actualUsuarioUid).exists()) {
-                        //creamos lo que va a ser un grupo
-                        MoldeUsuario usuario = dataSnapshot.getValue(MoldeUsuario.class);
-                        //se añade toda la informacion necesaria para acceder al chat puesto que no esta guardada en firebase
-                        //añadir uid del receptor
-                        usuario.setUidreceptor(UidGrupo);
-                        //añadir informacion del actual usuario emisor
-                        usuario.seteEmail(UidGrupo);
-                        usuario.setUidemisor(actualUsuarioUid);
-                        //esto es necesario para que no se rompa la aplicacion
-                        usuario.setConexion("desconectado");
-                        usuario.setNombre(nombreGrupo);
-                        //este campo esta vacia para tener una sola referencia en la rama chat y se pueda acceder a ella con distintos usuarios
-                        usuario.setEmail("");
-                        //el valor de esta variables da un poco igual pero son necesaria para que funcione la actividad del chat
-                        usuario.setCreado("0");
-                        usuario.seteCreado("1");
-                        miListaClaveUsuarios.add(UidGrupo);
-                        AdaptadorUsuarios.refill(usuario);
-
-                    }
-                }
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
-    //metodo para ir al login
-    protected void irLogin(){
-        Intent intent=new Intent(this,LogInActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        starFirebase.removeAuthStateListener(autentificar);
-        miListaClaveUsuarios.clear();
-        //detener todos los listener
-        if(listaUsuarios!=null){
-            ramaUsuarios.removeEventListener(listaUsuarios);
-        }
-        if(cambioconexion!=null){
-            starFirebase.getRoot().child(".info/connected").removeEventListener(cambioconexion);
-        }
-        if(listaProfesores!=null){
-            ramaProfesores.removeEventListener(listaProfesores);
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
     }
 
@@ -397,14 +126,33 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.main) {
+            alumnoFragment fragment = new alumnoFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        }else if (id==R.id.profesor){
+            profesorFragment fragment= new profesorFragment();
+            android.support.v4.app.FragmentTransaction fragmentTransaction =
+                    getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.fragment_container, fragment);
+            fragmentTransaction.commit();
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     //metodo para acabar la sesion
     private void logout(){
-        if(this.miAuthData!=null){
-            EstadoConexion.setValue(conexion.ESTADO_OFFLINE);
-            starFirebase.unauth();
-            setAuthenticatedUser(null);
-        }
+
     }
     //metodo para lanzar la actividad difusion
     protected void difusion(){
