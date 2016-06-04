@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".UserInterface.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,22 +23,22 @@
         <activity
             android:name=".UserInterface.LogInActivity"
             android:label="@string/title_LogIn"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <!-- actividad del registro -->
         <activity
             android:name=".UserInterface.Altausuario"
             android:label="@string/title_Altausuario"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <!-- actividad del chat -->
         <activity
             android:name=".UserInterface.Chat"
             android:label="chat"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".UserInterface.Difusion"
             android:label="@string/title_difusion"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".UserInterface.Grupo"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".UserInterface.Grupo" />
     </application>
 
 </manifest>
