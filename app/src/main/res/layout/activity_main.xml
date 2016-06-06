@@ -13,6 +13,46 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/RecyclerView" />
+        android:id="@+id/RecyclerUser"
+        android:layout_alignParentBottom="true" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/RecyclerView"
+        android:gravity="bottom"
+        android:layout_alignRight="@+id/RecyclerView"
+        android:layout_alignEnd="@+id/RecyclerView">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Usuarios"
+            android:id="@+id/button"
+            android:onClick="opcionUser"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_toLeftOf="@+id/space2"
+            android:layout_toStartOf="@+id/space2" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grupos"
+            android:id="@+id/button2"
+            android:onClick="opcionGrup"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/space2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <Space
+            android:layout_width="5px"
+            android:layout_height="10px"
+            android:layout_alignTop="@+id/button"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/space2" />
+    </RelativeLayout>
 
 </RelativeLayout>

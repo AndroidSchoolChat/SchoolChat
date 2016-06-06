@@ -34,11 +34,17 @@
             android:name=".UserInterface.Chat"
             android:label="chat"
             android:theme="@style/AppTheme" />
+        <!-- actividad de consulta grupos -->
+        <activity
+            android:name=".UserInterface.MostrarGrupo"
+            android:label="@string/title_group"
+            android:theme="@style/AppTheme" />
+        <!-- actividad de difusion -->
         <activity
             android:name=".UserInterface.Difusion"
             android:label="@string/title_difusion"
             android:theme="@style/AppTheme" />
-        <activity android:name=".UserInterface.Grupo"></activity>
+        <activity android:name=".UserInterface.Grupo" />
     </application>
 
 </manifest>

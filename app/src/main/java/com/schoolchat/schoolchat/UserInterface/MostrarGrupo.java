@@ -15,7 +15,6 @@ import com.firebase.client.AuthData;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.schoolchat.schoolchat.Adaptadores.AdaptadorGrupo;
@@ -27,13 +26,14 @@ import com.schoolchat.schoolchat.moldes.MoldeUsuario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-//clase para la vista de los usuarios / grupos de la aplicacion
-
+/**
+ * Created by oscar on 06/06/2016.
+ */
+public class MostrarGrupo extends AppCompatActivity {
     private Firebase starFirebase;
     private RecyclerView listaRecyclerView;
+    private AdaptadorGrupo adaptGrup;
     private AdaptadorUsuarios adaptUsu;
-    private AdaptadorGrupo adaptGroup;
     private Firebase.AuthStateListener autentificar;
     private AuthData miAuthData;
     private String actualUsuarioUid;
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_consulta_group);
         //para poder usar snackBar
         rootView=findViewById(R.id.root);
         //Iniciamos Firebase
@@ -65,15 +65,16 @@ public class MainActivity extends AppCompatActivity {
         ramaProfesores=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_PROFESORES);
         ramaGrupo=new Firebase(conexion.FIREBASE_SCHOOLCHAT).child(conexion.RAMA_GRUPOS);
         //refencia al recyclerview
-        listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerUser);
+        listaRecyclerView=(RecyclerView)findViewById(R.id.RecyclerGroup);
         //inicializar adaptador
         List<MoldeUsuario> listavacia=new ArrayList<MoldeUsuario>();
-        adaptUsu =new AdaptadorUsuarios(this,listavacia);
-        adaptGroup =new AdaptadorGrupo(this,listavacia);
+        List<MoldeUsuario> listavaciauser=new ArrayList<MoldeUsuario>();
+        adaptUsu =new AdaptadorUsuarios(this,listavaciauser);
+        adaptGrup =new AdaptadorGrupo(this,listavacia);
         //conectar recyclerview al adpatadorusuario
         listaRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         listaRecyclerView.setHasFixedSize(true);
-        listaRecyclerView.setAdapter(adaptUsu);
+        listaRecyclerView.setAdapter(adaptGrup);
         miListaClaveUsuarios=new ArrayList<String>();
         autentificar=new Firebase.AuthStateListener(){
 
@@ -83,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         starFirebase.addAuthStateListener(autentificar);
-
 
     }
     private void setAuthenticatedUser(AuthData authData){
@@ -300,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
                         moldeGrupoUsu.setCreado("0");
                         moldeGrupoUsu.setEmisorCreado("1");
                         miListaClaveUsuarios.add(UidGrupo);
-                        adaptUsu.refill(moldeGrupoUsu);
+                        adaptGrup.refill(moldeGrupoUsu);
 
                     }
                 }
@@ -409,11 +409,21 @@ public class MainActivity extends AppCompatActivity {
     }
     //metodo para lanzar la actividad difusion
     protected void difusion(){
-        Intent inDifusion=new Intent(MainActivity.this,Difusion.class);
+        Intent inDifusion=new Intent(MostrarGrupo.this,Difusion.class);
         startActivity(inDifusion);
     }
     protected void crearGrupo(){
-        Intent inGrupo=new Intent(MainActivity.this,Grupo.class);
+        Intent inGrupo=new Intent(MostrarGrupo.this,Grupo.class);
         startActivity(inGrupo);
+    }
+    protected void opcionUser(View view){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+
+    }
+    protected void opcionGrup(View view){
+        Intent intent = new Intent(this, AdaptadorGrupo.class);
+        startActivity(intent);
+
     }
 }

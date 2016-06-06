@@ -14,7 +14,7 @@
     <!--textos para la actividad alatausuario-->
     <string name="title_Altausuario">Nuevo Usuario</string>
     <string name="textDefCorreo">Correo electronico</string>
-    <string name="textDefNomUsu">Nombre de Usuario</string>
+    <string name="textDefNomUsu">Nombre y Apellido</string>
     <string name="textDefContr">Contraseña</string>
     <string name="botonCancelar">Cancelar</string>
     <string name="textContrVerif">Verificacion</string>
@@ -33,5 +33,7 @@
 
     <!--textos para difusión-->
     <string name="title_difusion">Mensaje de difusión</string>
+    <!--textos para mostrar grupos-->
+    <string name="title_group">Grupos</string>
 
 </resources>
