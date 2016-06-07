@@ -56,13 +56,26 @@
                     android:layout_alignLeft="@+id/ed_NombreUsuario"
                     android:layout_alignStart="@+id/ed_NombreUsuario" />
 
+
+                <EditText
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:ems="10"
+                    android:id="@+id/ed_RepContraseña"
+                    android:hint="@string/textDefRepContr"
+                    style="@style/EditText"
+                    android:layout_below="@+id/ed_Contraseña"
+                    android:layout_alignLeft="@+id/ed_Contraseña"
+                    android:layout_alignStart="@+id/ed_Contraseña" />
+
     <RadioGroup
         android:id="@+id/rg_tipo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ed_Contraseña"
-        android:layout_alignStart="@+id/ed_Contraseña"
-        android:layout_below="@+id/ed_Contraseña">
+        android:layout_alignLeft="@+id/ed_RepContraseña"
+        android:layout_alignStart="@+id/ed_RepContraseña"
+        android:layout_below="@+id/ed_RepContraseña">
 
         <RadioButton
             android:onClick="onCurso"

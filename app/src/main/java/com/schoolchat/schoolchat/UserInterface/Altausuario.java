@@ -28,7 +28,9 @@ public class Altausuario extends AppCompatActivity {
     private EditText edEm;
     private EditText edNomUsu;
     private EditText edContras;
+    private EditText edRepContras;
     private EditText edContrasVerif;
+
 
     private RadioButton rbProf;
 
@@ -50,7 +52,7 @@ public class Altausuario extends AppCompatActivity {
         edEm = (EditText) findViewById(R.id.ed_Email);
         edNomUsu = (EditText) findViewById(R.id.ed_NombreUsuario);
         edContras = (EditText) findViewById(R.id.ed_Contraseña);
-
+        edRepContras = (EditText) findViewById(R.id.ed_RepContraseña);
 
         rbProf = (RadioButton) findViewById(R.id.rb_Profesor);
 
@@ -96,6 +98,8 @@ public class Altausuario extends AppCompatActivity {
 
 
 
+
+
     public void onSign(View v) {
 
         //**--Codigo para el registro del PROFESOR:--*
@@ -106,97 +110,103 @@ public class Altausuario extends AppCompatActivity {
             final String RegEmProf = edEm.getText().toString();
             final String RegNomUsuProf = edNomUsu.getText().toString();
             final String RegContrasProf = edContras.getText().toString();
+            final String RegRepContras = edRepContras.getText().toString();
 
             //Comprobacion que en los campos se haya introducido datos:
-            if (RegEmProf.isEmpty() || RegNomUsuProf.isEmpty() || RegContrasProf.isEmpty()) {
+            if (RegEmProf.isEmpty() || RegNomUsuProf.isEmpty() || RegContrasProf.isEmpty() || RegRepContras.isEmpty()) {
                 MostrarError("Asegurese de que todos los campos esten rellenos.");
 
-            } else {
+            }else {
+                if (RegContrasProf.equals(RegRepContras)) {
 
-                //Conexion a FireBase para recuperar el valor de la contraseña de verificacion:
+                    //Conexion a FireBase para recuperar el valor de la contraseña de verificacion:
 
-                final Firebase FireBRegProf = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-                FireBRegProf.addListenerForSingleValueEvent(new ValueEventListener(){
-                    public void onDataChange(DataSnapshot snapshot) {
+                    final Firebase FireBRegProf = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                    FireBRegProf.addListenerForSingleValueEvent(new ValueEventListener() {
+                        public void onDataChange(DataSnapshot snapshot) {
 
-                        snapVerif = (String) snapshot.child("VerifyPassword").child("pass").getValue();
+                            snapVerif = (String) snapshot.child("VerifyPassword").child("pass").getValue();
 
-                        //Comprobacion en el IF de que la contraseña de verificacion introducida es correcta.
+                            //Comprobacion en el IF de que la contraseña de verificacion introducida es correcta.
 
-                        if(snapVerif.equals(edContrasVerif.getText().toString())){
+                            if (snapVerif.equals(edContrasVerif.getText().toString())) {
 
-                            //En caso de ser correcto creara el usuario.
-                            final Firebase registroProfesor = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                                //En caso de ser correcto creara el usuario.
+                                final Firebase registroProfesor = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
 
-                            final String addEmProf = RegEmProf;
-                            final String addContrasProf = RegContrasProf;
-                            final String addNomUsuProf = RegNomUsuProf;
+                                final String addEmProf = RegEmProf;
+                                final String addContrasProf = RegContrasProf;
+                                final String addNomUsuProf = RegNomUsuProf;
 
-                            //crear el usuario
-                            registroProfesor.createUser(RegEmProf, RegContrasProf, new Firebase.ValueResultHandler<Map<String, Object>>() {
-
-
-                                @Override
-                                public void onSuccess(Map<String, Object> stringObjectMap) {
-
-                                    Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_LONG).show();
-
-                                    registroProfesor.authWithPassword(addEmProf, addContrasProf, new Firebase.AuthResultHandler() {
-
-                                        @Override
-                                        public void onAuthenticated(AuthData authData) {
-                                            Map<String, Object> mapProf = new HashMap<String, Object>();
-                                            mapProf.put(conexion.INFO_NOMBRE, addNomUsuProf);
-                                            mapProf.put(conexion.INFO_EMAIL, addEmProf);
-                                            mapProf.put(conexion.RAMA_CONEXION, conexion.ESTADO_OFFLINE);
-
-                                            long fechaCreacionProf = new Date().getTime();
-                                            mapProf.put(conexion.INFO_FECHA, String.valueOf(fechaCreacionProf));
+                                //crear el usuario
+                                registroProfesor.createUser(RegEmProf, RegContrasProf, new Firebase.ValueResultHandler<Map<String, Object>>() {
 
 
-                                            registroProfesor.child(conexion.RAMA_PROFESORES).child(authData.getUid()).setValue(mapProf); //Añade los datos a Firebase en la pestaña de PROFESOR
+                                    @Override
+                                    public void onSuccess(Map<String, Object> stringObjectMap) {
+
+                                        Snackbar.make(rootView, "Se ha registrado un nuevo profesor.", Snackbar.LENGTH_LONG).show();
+
+                                        registroProfesor.authWithPassword(addEmProf, addContrasProf, new Firebase.AuthResultHandler() {
+
+                                            @Override
+                                            public void onAuthenticated(AuthData authData) {
+                                                Map<String, Object> mapProf = new HashMap<String, Object>();
+                                                mapProf.put(conexion.INFO_NOMBRE, addNomUsuProf);
+                                                mapProf.put(conexion.INFO_EMAIL, addEmProf);
+                                                mapProf.put(conexion.RAMA_CONEXION, conexion.ESTADO_OFFLINE);
+
+                                                long fechaCreacionProf = new Date().getTime();
+                                                mapProf.put(conexion.INFO_FECHA, String.valueOf(fechaCreacionProf));
+
+
+                                                registroProfesor.child(conexion.RAMA_PROFESORES).child(authData.getUid()).setValue(mapProf); //Añade los datos a Firebase en la pestaña de PROFESOR
 
                                                 Intent inReturnLogin = new Intent(Altausuario.this, LogInActivity.class);
                                                 inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                                 inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                 startActivity(inReturnLogin);
 
-                                        }
+                                            }
 
-                                        @Override
-                                        public void onAuthenticationError(FirebaseError firebaseError) {
+                                            @Override
+                                            public void onAuthenticationError(FirebaseError firebaseError) {
 
-                                        }
-                                    });
-                                }
+                                            }
+                                        });
+                                    }
 
-                                @Override
-                                public void onError(FirebaseError firebaseError) {
-                                    //si el usuario tiene problemas con el registro se le notificara un error
-                                    MostrarError(firebaseError.getMessage());
-                                }
-                            });
+                                    @Override
+                                    public void onError(FirebaseError firebaseError) {
+                                        //si el usuario tiene problemas con el registro se le notificara un error
+                                        MostrarError(firebaseError.getMessage());
+                                    }
+                                });
 
 
-                            //En caso de no ser correcta la contraseña se muestrara el mensaje de error correspondiente.
-                        }else{
+                                //En caso de no ser correcta la contraseña se muestrara el mensaje de error correspondiente.
+                            } else {
 
                                 AlertDialog.Builder errorVerif = new AlertDialog.Builder(Altausuario.this);
                                 errorVerif.setMessage(R.string.errorVerif);
                                 errorVerif.setPositiveButton(android.R.string.ok, null);
                                 errorVerif.show();
 
+                            }
+
                         }
 
-                    }
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-                        System.out.println("The read failed: " + firebaseError.getMessage());
-                    }
-                });
+                        @Override
+                        public void onCancelled(FirebaseError firebaseError) {
+                            System.out.println("The read failed: " + firebaseError.getMessage());
+                        }
+                    });
+
+                }else{
+                    MostrarError("Los campos de contraseña de usuario no coinciden.");
+                }
 
             }
-
 
         } else {
 
@@ -206,61 +216,71 @@ public class Altausuario extends AppCompatActivity {
             String RegEmUsu = edEm.getText().toString();
             String RegNomUsu = edNomUsu.getText().toString();
             String RegContrasUsu = edContras.getText().toString();
-            if (RegEmUsu.isEmpty() || RegNomUsu.isEmpty() || RegContrasUsu.isEmpty()) {
+            String RegRepContrasUsu = edRepContras.getText().toString();
+
+            if (RegEmUsu.isEmpty() || RegNomUsu.isEmpty() || RegContrasUsu.isEmpty() || RegRepContrasUsu.isEmpty()) {
                 MostrarError("Asegurese de que todos los campos esten rellenos.");
-            } else {
-                final Firebase FireBRegUsu = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
-                final String addEmUsu = RegEmUsu;
-                final String addContrasUsu = RegContrasUsu;
-                final String addNomUsu = RegNomUsu;
 
-                //Obtiene la opcion elegida del spinner:
-                final String spCursoTexto= spCurso.getSelectedItem().toString();
-
-                //crear el usuario
-                FireBRegUsu.createUser(RegEmUsu, RegContrasUsu, new Firebase.ValueResultHandler<Map<String, Object>>() {
+            }else{
+                if(RegContrasUsu.equals(RegRepContrasUsu)){
 
 
-                    @Override
-                    public void onSuccess(Map<String, Object> stringObjectMap) {
+                    final Firebase FireBRegUsu = new Firebase(conexion.FIREBASE_SCHOOLCHAT);
+                    final String addEmUsu = RegEmUsu;
+                    final String addContrasUsu = RegContrasUsu;
+                    final String addNomUsu = RegNomUsu;
 
-                         Snackbar.make(rootView, "Se ha registrado un nuevo alumno.", Snackbar.LENGTH_LONG).show();
+                    //Obtiene la opcion elegida del spinner:
+                    final String spCursoTexto= spCurso.getSelectedItem().toString();
 
-                        FireBRegUsu.authWithPassword(addEmUsu, addContrasUsu, new Firebase.AuthResultHandler() {
-
-                            @Override
-                            public void onAuthenticated(AuthData authData) {
-                                Map<String, Object> mapAlum = new HashMap<String, Object>();
-                                mapAlum.put(conexion.INFO_NOMBRE, addNomUsu);
-                                mapAlum.put(conexion.INFO_EMAIL, addEmUsu);
-                                mapAlum.put(conexion.RAMA_CONEXION, conexion.ESTADO_OFFLINE);
-                                mapAlum.put(conexion.INFO_CURSO,spCursoTexto);
-
-                                long fechaCreacionAlum = new Date().getTime();
-                                mapAlum.put(conexion.INFO_FECHA, String.valueOf(fechaCreacionAlum));
+                    //crear el usuario
+                    FireBRegUsu.createUser(RegEmUsu, RegContrasUsu, new Firebase.ValueResultHandler<Map<String, Object>>() {
 
 
-                                FireBRegUsu.child(conexion.RAMA_ALUMNOS).child(authData.getUid()).setValue(mapAlum); //Añade datos en la pestaña de usuarios.
+                        @Override
+                        public void onSuccess(Map<String, Object> stringObjectMap) {
 
-                                Intent inReturnLogin = new Intent(Altausuario.this, LogInActivity.class);
-                                inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(inReturnLogin);
-                            }
+                            Snackbar.make(rootView, "Se ha registrado un nuevo alumno.", Snackbar.LENGTH_LONG).show();
 
-                            @Override
-                            public void onAuthenticationError(FirebaseError firebaseError) {
+                            FireBRegUsu.authWithPassword(addEmUsu, addContrasUsu, new Firebase.AuthResultHandler() {
 
-                            }
-                        });
-                    }
+                                @Override
+                                public void onAuthenticated(AuthData authData) {
+                                    Map<String, Object> mapAlum = new HashMap<String, Object>();
+                                    mapAlum.put(conexion.INFO_NOMBRE, addNomUsu);
+                                    mapAlum.put(conexion.INFO_EMAIL, addEmUsu);
+                                    mapAlum.put(conexion.RAMA_CONEXION, conexion.ESTADO_OFFLINE);
+                                    mapAlum.put(conexion.INFO_CURSO,spCursoTexto);
 
-                    @Override
-                    public void onError(FirebaseError firebaseError) {
-                        //si el usuario tiene problemas con el registro se le notificara un error
-                        MostrarError(firebaseError.getMessage());
-                    }
-                });
+                                    long fechaCreacionAlum = new Date().getTime();
+                                    mapAlum.put(conexion.INFO_FECHA, String.valueOf(fechaCreacionAlum));
+
+
+                                    FireBRegUsu.child(conexion.RAMA_ALUMNOS).child(authData.getUid()).setValue(mapAlum); //Añade datos en la pestaña de usuarios.
+
+                                    Intent inReturnLogin = new Intent(Altausuario.this, LogInActivity.class);
+                                    inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    inReturnLogin.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(inReturnLogin);
+                                }
+
+                                @Override
+                                public void onAuthenticationError(FirebaseError firebaseError) {
+
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onError(FirebaseError firebaseError) {
+                            //si el usuario tiene problemas con el registro se le notificara un error
+                            MostrarError(firebaseError.getMessage());
+                        }
+                    });
+
+                }else {
+                    MostrarError("Los campos de contraseña de usuario no coinciden.");
+                }
             }
 
 
