@@ -44,7 +44,11 @@
             android:name=".UserInterface.Difusion"
             android:label="@string/title_difusion"
             android:theme="@style/AppTheme" />
-        <activity android:name=".UserInterface.Grupo"></activity>
+        <activity
+            android:name=".UserInterface.Grupo"
+            android:label="@string/title_grupo"
+            android:theme="@style/AppTheme"
+            />
     </application>
 
 </manifest>

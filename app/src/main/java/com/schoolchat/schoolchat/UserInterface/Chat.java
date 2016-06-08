@@ -132,7 +132,7 @@ public class Chat extends AppCompatActivity {
         String enviarmensaje= tvMensaje.getText().toString();
         enviarmensaje=enviarmensaje.trim();
         if(!enviarmensaje.isEmpty()){
-            enviarmensaje=nombreEmisor+':'+enviarmensaje;
+            enviarmensaje=nombreEmisor+": \n"+enviarmensaje;
             Map<String,String> mapNuevoMensaje=new HashMap<>();
             mapNuevoMensaje.put("emisor", UidEmisor);
             mapNuevoMensaje.put("receptor", UidReceptor);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -69,6 +70,8 @@ public class Altausuario extends AppCompatActivity {
         adaptCurso.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCurso.setAdapter(adaptCurso);
 
+        //De esta manera controlamos que el teclado no se abra al iniciar la actividad
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     //Seleccion de radioButton que determinara si sera visible la lista de cursos o la contraseña de verificacion.

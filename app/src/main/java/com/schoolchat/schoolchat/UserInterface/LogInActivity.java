@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 public class LogInActivity extends AppCompatActivity {
@@ -26,6 +27,9 @@ public class LogInActivity extends AppCompatActivity {
         //asociando las variables
         edEmail =(EditText)findViewById(R.id.userEmail);
         edContras =(EditText)findViewById(R.id.password);
+
+        //De esta manera controlamos que el teclado no se abra al iniciar la actividad
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
 
     }

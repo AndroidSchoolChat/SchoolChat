@@ -34,5 +34,7 @@
 
     <!--textos para difusión-->
     <string name="title_difusion">Mensaje de difusión</string>
+    <!--textos para difusión-->
+    <string name="title_grupo">Crear grupo</string>
 
 </resources>
